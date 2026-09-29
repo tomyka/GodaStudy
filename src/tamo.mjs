@@ -99,16 +99,18 @@ export function toMarks(items, { testTypes, subjects = {} }) {
     const value = String(item.assessmentValue ?? "").trim();
     if (!value) continue;
     const date = String(item.subjectDate ?? item.assessmentDateTime ?? "").slice(0, 10);
-    if (!/^(10|[1-9])$/.test(value) || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !item.subject) {
-      skipped[value] = (skipped[value] ?? 0) + 1;
+    const subject = String(item.subject ?? "").trim();
+    const reason = !/^(10|[1-9])$/.test(value) ? value : !/^\d{4}-\d{2}-\d{2}$/.test(date) ? "no date" : !subject ? "no subject" : null;
+    if (reason) {
+      skipped[reason] = (skipped[reason] ?? 0) + 1;
       continue;
     }
     const type = String(item.assessmentType ?? "").toLowerCase();
-    const prefix = Object.keys(subjects).find((p) => item.subject.startsWith(p));
+    const prefix = Object.keys(subjects).find((p) => subject.startsWith(p));
     marks.push({
       date,
       month: date.slice(0, 7),
-      subject: prefix ? subjects[prefix] : item.subject.trim(),
+      subject: prefix ? subjects[prefix] : subject,
       mark: Number(value),
       kind: testTypes.some((t) => type.includes(t)) ? "K" : "A",
     });
@@ -117,5 +119,13 @@ export function toMarks(items, { testTypes, subjects = {} }) {
   return { marks, skipped };
 }
 
-// 1 September of the school year that `today` (YYYY-MM-DD) falls in.
-export const schoolYearStart = (today) => `${Number(today.slice(0, 4)) - (today.slice(5, 7) < "09" ? 1 : 0)}-09-01`;
+// 1 September of the school year that `day` (YYYY-MM-DD) falls in.
+export const schoolYearStart = (day) => `${Number(day.slice(0, 4)) - (day.slice(5, 7) < "09" ? 1 : 0)}-09-01`;
+
+// The last day of the month before `today`: a month is settled once it is over, so a run on
+// the 1st never shows the first few marks of the new month.
+export function previousMonthEnd(today) {
+  const day = new Date(`${today.slice(0, 7)}-01T00:00:00Z`);
+  day.setUTCDate(0);
+  return day.toISOString().slice(0, 10);
+}

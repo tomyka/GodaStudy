@@ -37,7 +37,8 @@ test("each subject sums its marks per month and keeps a running total", () => {
 });
 
 test("the imported 7th grade reproduces the sheet's totals", () => {
-  const marks = JSON.parse(readFileSync(new URL("../site/marks.json", import.meta.url), "utf8")).filter((m) => m.month < "2026-09");
+  // The sheet's "7 klasė" tab as imported into site/marks.json, frozen here.
+  const marks = JSON.parse(readFileSync(new URL("fixtures/marks-7-klase.json", import.meta.url), "utf8"));
   const { subjects, monthTotals, total } = computeRewards(marks);
   assert.deepEqual(Object.fromEntries(subjects.map((s) => [s.name, s.total])), {
     "Anglų k.": 80, Biologija: 7, Fizika: -39, Geografija: 38, Informatika: 8,

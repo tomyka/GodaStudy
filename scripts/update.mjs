@@ -1,9 +1,10 @@
-// Monthly job: fetch this school year's marks from TAMO, then rewrite site/marks.json and site/data.json.
+// Monthly job: fetch this school year's marks up to the end of last month from TAMO,
+// then rewrite site/marks.json and site/data.json.
 // Needs TAMO_USERNAME and TAMO_PASSWORD (scripts/monthly.ps1 sets them from the saved login).
 //   --offline              skip TAMO and rebuild data.json from marks.json, e.g. after a config change
 //   --accept-fewer-marks   allow TAMO to return fewer marks than stored, after a deliberate correction
 import { readFile, writeFile } from "node:fs/promises";
-import { fetchDiary, fetchRole, login, schoolYearStart, toMarks } from "../src/tamo.mjs";
+import { fetchDiary, fetchRole, login, previousMonthEnd, schoolYearStart, toMarks } from "../src/tamo.mjs";
 import { buildReport, mergeMarks } from "../src/report.mjs";
 
 const root = new URL("../", import.meta.url);
@@ -17,10 +18,12 @@ if (!process.argv.includes("--offline")) {
   if (!TAMO_USERNAME || !TAMO_PASSWORD) throw new Error("Set TAMO_USERNAME and TAMO_PASSWORD, or pass --offline");
   const token = await login(TAMO_USERNAME, TAMO_PASSWORD);
   const role = await fetchRole(token, config.tamo.role);
-  const from = schoolYearStart(today);
-  const { marks: fetched, skipped } = toMarks(await fetchDiary(token, role, from, today), config.tamo);
+  // The school year up to the end of last month; a July or August run re-reads the year just ended.
+  const to = previousMonthEnd(today);
+  const from = schoolYearStart(to);
+  const { marks: fetched, skipped } = toMarks(await fetchDiary(token, role, from, to), config.tamo);
   const tests = fetched.filter((m) => m.kind === "K").length;
-  console.log(`TAMO ${from}..${today}: ${fetched.length} marks (${tests} tests)`);
+  console.log(`TAMO ${from}..${to}: ${fetched.length} marks (${tests} tests)`);
   if (Object.keys(skipped).length) console.log(`Skipped non-mark values: ${JSON.stringify(skipped)}`);
   marks = mergeMarks(marks, fetched, from, { acceptFewer: process.argv.includes("--accept-fewer-marks") });
   await writeFile(marksFile, JSON.stringify(marks, null, 2) + "\n");

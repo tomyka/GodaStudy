@@ -15,10 +15,7 @@ export function markValue(mark, kind) {
   return mark <= 5 ? rates.low : rates[mark];
 }
 
-// School months only: July and August never have marks.
-export const isSchoolMonth = (month) => !["07", "08"].includes(month.slice(5, 7));
-
-// "2026-06" -> "2026-09": the next school month.
+// "2026-06" -> "2026-09": the next school month; July and August never have marks.
 export function nextSchoolMonth(month) {
   let [y, m] = month.split("-").map(Number);
   do {

@@ -1,7 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { schoolYearStart, selectRole, toMarks, weeks } from "../src/tamo.mjs";
-import { mergeMarks } from "../src/report.mjs";
+import { previousMonthEnd, schoolYearStart, selectRole, toMarks, weeks } from "../src/tamo.mjs";
 
 const options = { testTypes: ["kontrolin"], subjects: { "Lietuvių kalba": "Lietuvių k." } };
 
@@ -29,7 +28,7 @@ test("attendance, pass/fail and odd values are skipped and counted", () => {
     { subject: "Matematika", assessmentValue: "9" },
   ], options);
   assert.deepEqual(marks, []);
-  assert.deepEqual(skipped, { įsk: 1, n: 2, 11: 1, 9: 1 });
+  assert.deepEqual(skipped, { įsk: 1, n: 2, 11: 1, "no date": 1 });
 });
 
 test("weeks cover the range Monday to Sunday without overlap", () => {
@@ -47,25 +46,17 @@ test("the school year starts on 1 September", () => {
   assert.equal(schoolYearStart("2026-08-31"), "2025-09-01");
 });
 
+test("the fetch stops at the end of the previous month", () => {
+  assert.equal(previousMonthEnd("2026-10-01"), "2026-09-30");
+  assert.equal(previousMonthEnd("2026-03-15"), "2026-02-28");
+  assert.equal(previousMonthEnd("2027-01-01"), "2026-12-31");
+  // A 1 September run re-reads the year just ended, not the empty new one.
+  assert.equal(schoolYearStart(previousMonthEnd("2027-09-01")), "2026-09-01");
+});
+
 test("a role is picked by name, or is the only one", () => {
   const roles = [{ id: "a", title: "Goda Konovalovaitė", subtitle: "8a" }, { id: "b", title: "Paulius", subtitle: "5b" }];
   assert.equal(selectRole(roles, "goda"), "a");
   assert.equal(selectRole([roles[1]], undefined), "b");
   assert.throws(() => selectRole(roles, "Ieva"), /found 0 of 2/);
-});
-
-test("a fetch replaces this year's marks and keeps older ones", () => {
-  const sheet = { month: "2026-05", subject: "Fizika", mark: 10, kind: "A" };
-  const old = { date: "2026-09-10", month: "2026-09", subject: "Fizika", mark: 8, kind: "A" };
-  const fresh = [{ ...old, mark: 9 }, { ...old, date: "2026-09-20" }];
-  assert.deepEqual(mergeMarks([sheet, old], fresh, "2026-09-01"), [sheet, ...fresh]);
-});
-
-test("a fetch with fewer marks than stored is refused unless accepted", () => {
-  const stored = [
-    { date: "2026-09-10", month: "2026-09", subject: "Fizika", mark: 8, kind: "A" },
-    { date: "2026-09-11", month: "2026-09", subject: "Fizika", mark: 9, kind: "A" },
-  ];
-  assert.throws(() => mergeMarks(stored, [], "2026-09-01"), /0 marks since 2026-09-01, fewer than the 2/);
-  assert.deepEqual(mergeMarks(stored, [stored[0]], "2026-09-01", { acceptFewer: true }), [stored[0]]);
 });

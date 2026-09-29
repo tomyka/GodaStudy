@@ -1,0 +1,662 @@
+[
+  {
+    "month": "2025-09",
+    "subject": "Geografija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-09",
+    "subject": "Istorija",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2025-09",
+    "subject": "Istorija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-09",
+    "subject": "Matematika",
+    "mark": 7,
+    "kind": "K"
+  },
+  {
+    "month": "2025-09",
+    "subject": "Prancūzų k.",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2025-09",
+    "subject": "Anglų k.",
+    "mark": 7,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Biologija",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Biologija",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Biologija",
+    "mark": 9,
+    "kind": "K"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Fizika",
+    "mark": 8,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Geografija",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Geografija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Informatika",
+    "mark": 8,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Istorija",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Lietuvių k.",
+    "mark": 8,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Lietuvių k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Lietuvių k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Matematika",
+    "mark": 7,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Matematika",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Matematika",
+    "mark": 8,
+    "kind": "K"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-10",
+    "subject": "Anglų k.",
+    "mark": 8,
+    "kind": "K"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Biologija",
+    "mark": 7,
+    "kind": "K"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Fizika",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Geografija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Informatika",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Istorija",
+    "mark": 8,
+    "kind": "A"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Lietuvių k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Lietuvių k.",
+    "mark": 4,
+    "kind": "A"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Matematika",
+    "mark": 9,
+    "kind": "K"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Prancūzų k.",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-11",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-12",
+    "subject": "Biologija",
+    "mark": 8,
+    "kind": "A"
+  },
+  {
+    "month": "2025-12",
+    "subject": "Biologija",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2025-12",
+    "subject": "Biologija",
+    "mark": 7,
+    "kind": "K"
+  },
+  {
+    "month": "2025-12",
+    "subject": "Fizika",
+    "mark": 5,
+    "kind": "A"
+  },
+  {
+    "month": "2025-12",
+    "subject": "Lietuvių k.",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2025-12",
+    "subject": "Matematika",
+    "mark": 10,
+    "kind": "K"
+  },
+  {
+    "month": "2025-12",
+    "subject": "Prancūzų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-12",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2025-12",
+    "subject": "Anglų k.",
+    "mark": 7,
+    "kind": "K"
+  },
+  {
+    "month": "2026-01",
+    "subject": "Fizika",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2026-01",
+    "subject": "Geografija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-01",
+    "subject": "Informatika",
+    "mark": 8,
+    "kind": "A"
+  },
+  {
+    "month": "2026-01",
+    "subject": "Lietuvių k.",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2026-01",
+    "subject": "Matematika",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2026-01",
+    "subject": "Prancūzų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-01",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-01",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-01",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-01",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-02",
+    "subject": "Biologija",
+    "mark": 8,
+    "kind": "A"
+  },
+  {
+    "month": "2026-02",
+    "subject": "Biologija",
+    "mark": 9,
+    "kind": "K"
+  },
+  {
+    "month": "2026-02",
+    "subject": "Geografija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-02",
+    "subject": "Geografija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-02",
+    "subject": "Istorija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-02",
+    "subject": "Lietuvių k.",
+    "mark": 8,
+    "kind": "A"
+  },
+  {
+    "month": "2026-02",
+    "subject": "Lietuvių k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-02",
+    "subject": "Matematika",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2026-02",
+    "subject": "Matematika",
+    "mark": 7,
+    "kind": "K"
+  },
+  {
+    "month": "2026-02",
+    "subject": "Prancūzų k.",
+    "mark": 9,
+    "kind": "K"
+  },
+  {
+    "month": "2026-02",
+    "subject": "Anglų k.",
+    "mark": 9,
+    "kind": "K"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Biologija",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Biologija",
+    "mark": 6,
+    "kind": "K"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Fizika",
+    "mark": 7,
+    "kind": "K"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Geografija",
+    "mark": 8,
+    "kind": "A"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Istorija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Lietuvių k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Lietuvių k.",
+    "mark": 7,
+    "kind": "A"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Lietuvių k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Lietuvių k.",
+    "mark": 7,
+    "kind": "A"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Matematika",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Matematika",
+    "mark": 10,
+    "kind": "K"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-03",
+    "subject": "Anglų k.",
+    "mark": 8,
+    "kind": "A"
+  },
+  {
+    "month": "2026-04",
+    "subject": "Biologija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-04",
+    "subject": "Biologija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-04",
+    "subject": "Fizika",
+    "mark": 4,
+    "kind": "A"
+  },
+  {
+    "month": "2026-04",
+    "subject": "Istorija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-04",
+    "subject": "Lietuvių k.",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2026-04",
+    "subject": "Matematika",
+    "mark": 10,
+    "kind": "K"
+  },
+  {
+    "month": "2026-04",
+    "subject": "Prancūzų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-04",
+    "subject": "Prancūzų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-04",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-04",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-04",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Biologija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Fizika",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Geografija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Istorija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Istorija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Lietuvių k.",
+    "mark": 7,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Lietuvių k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Matematika",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Matematika",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Matematika",
+    "mark": 9,
+    "kind": "K"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Prancūzų k.",
+    "mark": 9,
+    "kind": "K"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-05",
+    "subject": "Anglų k.",
+    "mark": 7,
+    "kind": "K"
+  },
+  {
+    "month": "2026-06",
+    "subject": "Informatika",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2026-06",
+    "subject": "Lietuvių k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "month": "2026-06",
+    "subject": "Lietuvių k.",
+    "mark": 9,
+    "kind": "A"
+  },
+  {
+    "month": "2026-06",
+    "subject": "Matematika",
+    "mark": 10,
+    "kind": "A"
+  }
+]
