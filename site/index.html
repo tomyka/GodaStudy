@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Goda Study Rewards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one narrow column; money tiles, a year filter, the monthly and running-total charts,
+   the subject-by-month grid, then the latest marks, payments and the pay table. */
+:root {
+  --bg: #f6f7f9; --surface: #ffffff; --ink: #14171c; --ink-2: #4c5361; --ink-3: #7a8190;
+  --line: #e2e5ea; --grid: #edf0f3;
+  --pos: #2a78d6; --neg: #e34948; --zero: #f0efec;
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121418; --surface: #1a1d22; --ink: #f2f4f7; --ink-2: #b9bfca; --ink-3: #8a91a0;
+  --line: #2c3139; --grid: #23272e; --pos: #3987e5; --neg: #e66767; --zero: #383835; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121418; --surface: #1a1d22; --ink: #f2f4f7; --ink-2: #b9bfca; --ink-3: #8a91a0;
+  --line: #2c3139; --grid: #23272e; --pos: #3987e5; --neg: #e66767; --zero: #383835; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.55 var(--f-body); margin: 0; }
+.wrap { max-width: 880px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+h1, h2 { font-family: var(--f-display); text-wrap: balance; margin: 0; }
+h1 { font-size: 2rem; line-height: 1.1; font-weight: 700; }
+h2 { font-size: 1.25rem; font-weight: 700; }
+.eyebrow { font: 500 .72rem/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+.lede { color: var(--ink-2); max-width: 62ch; margin: 6px 0 0; }
+header { display: grid; gap: 6px; }
+
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.tile.lead .v { font-size: 2rem; }
+.tile.lead { border-color: var(--ink-3); }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; gap: 4px; min-width: 0; }
+.tile .v { font: 700 1.6rem/1.1 var(--f-display); font-variant-numeric: tabular-nums; }
+.tile .k { font-size: .8rem; color: var(--ink-2); display: flex; align-items: center; gap: 6px; }
+.tile .d { font: 400 .78rem/1.3 var(--f-mono); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; display: inline-block; }
+@media (max-width: 640px) { .tiles { grid-template-columns: repeat(2, 1fr); } .tile.lead { grid-column: 1 / -1; } h1 { font-size: 1.6rem; } }
+.empty { color: var(--ink-2); font-size: .9rem; margin: 0; }
+
+.filter { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.filter .lab { font: 500 .72rem/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); margin-right: 4px; }
+.filter button { font: 500 .85rem/1 var(--f-body); color: var(--ink-2); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+.filter button[aria-pressed="true"] { color: var(--surface); background: var(--ink); border-color: var(--ink); }
+
+section.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; min-width: 0; }
+.card-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 10px 20px; }
+.card-head p { margin: 4px 0 0; color: var(--ink-2); font-size: .9rem; max-width: 60ch; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .82rem; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.sw-line { width: 18px; height: 2px; display: inline-block; }
+.sw-box { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { font-family: var(--f-mono); font-size: 11px; fill: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+.tablewrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .85rem; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+th { font: 500 .7rem/1 var(--f-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+td.eur { font-weight: 600; }
+
+/* Subject-by-month grid: each cell is that month's euros, shaded blue (earned) or red (lost). */
+table.grid { border-collapse: separate; border-spacing: 2px; }
+table.grid th, table.grid td { border: 0; padding: 6px 4px; text-align: center; }
+table.grid th:first-child, table.grid td:first-child { text-align: left; padding-right: 10px; font-weight: 500; position: sticky; left: 0; background: var(--surface); }
+table.grid td.c { border-radius: 4px; min-width: 42px; font-size: .78rem; cursor: default; }
+table.grid td.c.none { color: var(--ink-3); }
+table.grid td.tot { font-weight: 600; text-align: right; padding-left: 10px; }
+table.grid tr.sum td { border-top: 1px solid var(--line); font-weight: 600; }
+table.grid th.yr { border-left: 2px solid var(--line); }
+table.grid td.yr { box-shadow: -2px 0 0 var(--line); }
+
+.latest { display: grid; gap: 10px; }
+.latest .subj { display: grid; grid-template-columns: 130px 1fr auto; gap: 10px; align-items: center; }
+.latest .name { font-weight: 500; font-size: .9rem; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 500 .8rem/1 var(--f-mono); border-radius: 6px; padding: 6px 8px; border: 1px solid var(--line); display: inline-flex; gap: 4px; align-items: baseline; }
+.chip small { font-size: .68rem; color: var(--ink-3); }
+.latest .eur { font: 600 .85rem/1 var(--f-mono); text-align: right; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) { .latest .subj { grid-template-columns: 1fr auto; } .latest .chips { grid-column: 1 / -1; grid-row: 2; } }
+
+.tip { position: fixed; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; font: 400 .78rem/1.45 var(--f-mono); box-shadow: 0 4px 16px rgb(0 0 0 / .12); font-variant-numeric: tabular-nums; z-index: 5; min-width: 160px; }
+.tip .t { font-weight: 500; margin-bottom: 2px; }
+.tip .row { display: flex; justify-content: space-between; gap: 14px; }
+.tip .row span:first-child { color: var(--ink-2); }
+footer { color: var(--ink-3); font-size: .8rem; }
+a { color: inherit; }
+.error { color: var(--ink-2); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow" id="meta">Study rewards</div>
+    <h1 id="title">Study Rewards</h1>
+    <p class="lede">Every mark in the e-diary pays or costs money: good marks earn, weak ones take some back. Tests count double. What is earned minus what has been paid is the balance.</p>
+  </header>
+
+  <div class="tiles" id="money-tiles"></div>
+
+  <div class="filter" id="filter" role="group" aria-label="School year"></div>
+
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2>Month by month</h2>
+        <p>Euros from each month's marks, all subjects together. Bars above the line are months that earned money; below the line, months where weak marks outweighed good ones.</p>
+      </div>
+      <div class="legend"><span><i class="sw-box" style="background:var(--pos)"></i>Earned</span><span><i class="sw-box" style="background:var(--neg)"></i>Lost</span></div>
+    </div>
+    <div id="monthly"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2>Earned and paid</h2>
+        <p>Running totals in euros. The gap between the lines is the balance: when the earned line is above, money is owed.</p>
+      </div>
+      <div class="legend"><span><i class="sw-line" style="background:var(--pos)"></i>Earned</span><span><i class="sw-line" style="background:var(--ink)"></i>Paid</span></div>
+    </div>
+    <div id="running"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2>Subjects</h2>
+        <p>Euros per subject and month. Hover a cell for the marks behind it; "K" marks a test.</p>
+      </div>
+      <div class="legend"><span><i class="sw-box" style="background:color-mix(in oklab, var(--pos) 70%, var(--surface))"></i>Earned</span><span><i class="sw-box" style="background:var(--zero)"></i>€0</span><span><i class="sw-box" style="background:color-mix(in oklab, var(--neg) 70%, var(--surface))"></i>Lost</span></div>
+    </div>
+    <div class="tablewrap"><table class="grid" id="grid"></table></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2 id="latest-title">Latest marks</h2>
+        <p>Every mark of the most recent month, with what each one paid.</p>
+      </div>
+    </div>
+    <div class="latest" id="latest"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2>Payments</h2>
+        <p>Money handed over, newest first (year/month), and the balance after each payment.</p>
+      </div>
+    </div>
+    <div class="tablewrap" id="payments"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <div>
+        <h2>What each mark pays</h2>
+        <p>A test (kontrolinis darbas) counts roughly double a regular mark.</p>
+      </div>
+    </div>
+    <div class="tablewrap"><table id="rates"></table></div>
+  </section>
+
+  <footer id="footer"></footer>
+</div>
+<div class="tip" id="tip" hidden></div>
+
+<script type="module">
+const NS = "http://www.w3.org/2000/svg";
+const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; };
+const toDate = m => new Date(+m.slice(0, 4), +m.slice(5, 7) - 1, 1);
+const fmtM = m => toDate(m).toLocaleDateString("en-GB", { month: "short", year: "numeric" });
+const fmtMs = m => toDate(m).toLocaleDateString("en-GB", { month: "short" });
+const fmtD = d => new Date(`${d}T12:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+const eur = n => (n < 0 ? "−" : "") + "€" + Math.abs(n).toLocaleString("en-GB", { maximumFractionDigits: 2 });
+const signed = n => (n > 0 ? "+" : "") + eur(n);
+const markText = m => (m.kind === "K" ? "K" : "") + m.mark;
+// Shade for a euro amount: blue for earned, red for lost, grey for zero; stronger with size.
+const shade = (v, max) => v === 0 ? "var(--zero)" : `color-mix(in oklab, ${v > 0 ? "var(--pos)" : "var(--neg)"} ${Math.round(18 + 57 * Math.min(1, Math.abs(v) / max))}%, var(--surface))`;
+
+const getJson = async (file) => {
+  const res = await fetch(file, { cache: "no-cache" });
+  if (!res.ok) throw new Error(`${file}: HTTP ${res.status}`);
+  return res.json();
+};
+let data, payments;
+try {
+  [data, payments] = await Promise.all([getJson("data.json"), getJson("payouts.json").catch(() => [])]);
+} catch (err) {
+  document.querySelector(".wrap").insertAdjacentHTML("beforeend", `<p class="error">Could not load the marks (${err.message}).</p>`);
+  throw err;
+}
+
+const MONTHS = data.months;
+const last = MONTHS.length - 1;
+const yearOf = m => data.years.filter(y => y.from <= m).at(-1);
+const monthIndexOf = date => { let i = -1; while (i < last && MONTHS[i + 1] <= date.slice(0, 7)) i++; return i; };
+const cumEarned = []; MONTHS.forEach((_, i) => cumEarned.push((cumEarned[i - 1] ?? 0) + data.monthTotals[i]));
+const earnedBy = i => i < 0 ? 0 : cumEarned[i];
+let paidSoFar = 0;
+const PAID = payments.map(p => { paidSoFar += p.eur; return { ...p, cum: paidSoFar, i: monthIndexOf(p.date) }; });
+const paidTotal = paidSoFar;
+const paidBy = i => PAID.filter(p => p.i <= i).reduce((s, p) => s + p.eur, 0);
+const balance = data.total - paidTotal;
+const marksIn = i => data.subjects.flatMap(s => s.months[i].marks.map(m => ({ ...m, subject: s.name })));
+
+// Header, footer and tiles
+document.title = `${data.student.name} Study Rewards`;
+document.getElementById("title").textContent = `${data.student.name}'s study rewards`;
+document.getElementById("meta").textContent = MONTHS.length ? `Study rewards · marks to ${fmtM(MONTHS[last])}` : "Study rewards";
+document.getElementById("footer").innerHTML = `Marks from the TAMO e-diary, refreshed on the 1st of each month (the 7th grade was imported from the family sheet). Last updated ${fmtD(data.updatedAt)}.`;
+const lastPaid = PAID.at(-1);
+const thisMonth = data.monthTotals[last] ?? 0;
+document.getElementById("money-tiles").innerHTML =
+  `<div class="tile lead"><div class="k">${balance >= 0 ? "Owed now" : "Paid ahead"}</div><div class="v">${eur(Math.abs(balance))}</div><div class="d">earned minus paid</div></div>` +
+  `<div class="tile"><div class="k"><i class="sw-line" style="background:var(--pos)"></i>Total earned</div><div class="v">${eur(data.total)}</div><div class="d">${MONTHS.length ? `${signed(thisMonth)} in ${fmtM(MONTHS[last])}` : "no marks yet"}</div></div>` +
+  `<div class="tile"><div class="k"><i class="sw-line" style="background:var(--ink)"></i>Total paid</div><div class="v">${eur(paidTotal)}</div><div class="d">${lastPaid ? `last ${fmtD(lastPaid.date)}` : "no payments yet"}</div></div>`;
+
+// Tooltip
+const tip = document.getElementById("tip");
+function showTip(e, html) {
+  tip.innerHTML = html; tip.hidden = false;
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  let x = e.clientX + 14, y = e.clientY - h - 10;
+  if (x + w > innerWidth - 8) x = e.clientX - w - 14;
+  if (y < 8) y = e.clientY + 16;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+}
+const hideTip = () => tip.hidden = true;
+const row = (label, val) => `<div class="row"><span>${label}</span><span>${val}</span></div>`;
+const monthTip = i => {
+  const subs = data.subjects.map(s => ({ name: s.name, ...s.months[i] })).filter(s => s.marks.length).sort((a, b) => b.earned - a.earned);
+  return `<div class="t">${fmtM(MONTHS[i])} · ${signed(data.monthTotals[i])}</div>` +
+    subs.map(s => row(s.name, `${s.marks.map(markText).join(" ")} · ${signed(s.earned)}`)).join("");
+};
+
+// Year filter: redraws the monthly chart and the subject grid for one school year, or all of them.
+const withMarks = data.years.filter(y => MONTHS.some(m => yearOf(m) === y));
+let year = withMarks.at(-1) ?? null;
+const filter = document.getElementById("filter");
+function drawFilter() {
+  const opts = [...withMarks.map(y => [y.label, y]), ["All years", null]];
+  filter.innerHTML = `<span class="lab">School year</span>` + opts.map(([label], k) => `<button type="button" data-k="${k}" aria-pressed="${opts[k][1] === year}">${label}</button>`).join("");
+  filter.querySelectorAll("button").forEach(b => b.onclick = () => { year = opts[+b.dataset.k][1]; drawFilter(); drawMonthly(); drawGrid(); });
+}
+const visible = () => MONTHS.map((m, i) => i).filter(i => !year || yearOf(MONTHS[i]) === year);
+
+// Month by month: one bar per school month, from a zero baseline; a gap separates school years.
+const W = 720;
+function drawMonthly() {
+  const box = document.getElementById("monthly");
+  box.innerHTML = "";
+  const idx = visible();
+  if (!idx.length) { box.innerHTML = `<p class="empty">No marks yet.</p>`; return; }
+  const H = 240, M = { l: 48, r: 8, t: 14, b: 34 };
+  const breaks = idx.filter((i, k) => k && yearOf(MONTHS[i]) !== yearOf(MONTHS[idx[k - 1]])).length;
+  const slots = idx.length + breaks * .8;
+  const slotW = (W - M.l - M.r) / slots;
+  const xs = []; let pos = 0;
+  idx.forEach((i, k) => { if (k && yearOf(MONTHS[i]) !== yearOf(MONTHS[idx[k - 1]])) pos += .8; xs.push(M.l + (pos + .5) * slotW); pos++; });
+  const vals = idx.map(i => data.monthTotals[i]);
+  const step = 20;
+  const hi = Math.max(step, Math.ceil(Math.max(...vals) / step) * step), lo = Math.min(0, Math.floor(Math.min(...vals) / step) * step);
+  const y = v => M.t + (hi - v) / (hi - lo) * (H - M.t - M.b);
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Euros earned per month" });
+  for (let v = lo; v <= hi; v += step) {
+    el("line", { x1: M.l, x2: W - M.r, y1: y(v), y2: y(v), stroke: v ? "var(--grid)" : "var(--ink-3)" }, svg);
+    const t = el("text", { x: M.l - 8, y: y(v) + 4, "text-anchor": "end" }, svg); t.textContent = eur(v);
+  }
+  const bw = Math.min(34, slotW * .62);
+  idx.forEach((i, k) => {
+    const v = vals[k], x = xs[k];
+    if (v) {
+      // 4px rounded end away from the baseline, square at the baseline.
+      const top = y(Math.max(v, 0)), bot = y(Math.min(v, 0)), r = Math.min(4, bot - top);
+      const d = v > 0
+        ? `M${x - bw / 2},${bot}V${top + r}q0,-${r} ${r},-${r}H${x + bw / 2 - r}q${r},0 ${r},${r}V${bot}Z`
+        : `M${x - bw / 2},${top}V${bot - r}q0,${r} ${r},${r}H${x + bw / 2 - r}q${r},0 ${r},-${r}V${top}Z`;
+      el("path", { d, fill: v > 0 ? "var(--pos)" : "var(--neg)" }, svg);
+    }
+    const t = el("text", { x, y: H - 18, "text-anchor": "middle" }, svg); t.textContent = fmtMs(MONTHS[i]);
+    if (!k || yearOf(MONTHS[i]) !== yearOf(MONTHS[idx[k - 1]])) {
+      const yl = el("text", { x: x - bw / 2, y: H - 3, "text-anchor": "start" }, svg); yl.textContent = yearOf(MONTHS[i]).label;
+    }
+    const hit = el("rect", { x: x - slotW / 2, y: 0, width: slotW, height: H - M.b, fill: "transparent" }, svg);
+    hit.addEventListener("pointermove", e => showTip(e, monthTip(i)));
+    hit.addEventListener("pointerleave", hideTip);
+  });
+  box.appendChild(svg);
+}
+
+// Earned and paid: running totals on one euro axis; paid steps at each payment's day.
+(() => {
+  const box = document.getElementById("running");
+  if (!MONTHS.length) { box.innerHTML = `<p class="empty">No marks yet.</p>`; return; }
+  const H = 240, M = { l: 52, r: 8, t: 10, b: 22 };
+  const x = i => M.l + (last ? i / last : .5) * (W - M.l - M.r);
+  const max = Math.max(100, Math.ceil(Math.max(...cumEarned, paidTotal) / 100) * 100);
+  const min = Math.min(0, Math.floor(Math.min(...cumEarned) / 100) * 100);
+  const y = v => M.t + (max - v) / (max - min) * (H - M.t - M.b);
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Running totals of euros earned and paid" });
+  for (let v = min; v <= max; v += (max - min) / 4) {
+    el("line", { x1: M.l, x2: W - M.r, y1: y(v), y2: y(v), stroke: v ? "var(--grid)" : "var(--line)" }, svg);
+    const t = el("text", { x: M.l - 8, y: y(v) + 4, "text-anchor": "end" }, svg); t.textContent = eur(v);
+  }
+  MONTHS.forEach((m, i) => { if (!i || yearOf(m) !== yearOf(MONTHS[i - 1])) { const t = el("text", { x: x(i), y: H - 6, "text-anchor": i ? "middle" : "start" }, svg); t.textContent = yearOf(m).label; } });
+  // Earned is counted at each month's end: the point for month i is the total after it.
+  el("path", { d: `M${x(0)},${y(0)}` + cumEarned.map((v, i) => `L${x(i)},${y(v)}`).join(""), fill: "none", stroke: "var(--pos)", "stroke-width": 2, "stroke-linejoin": "round" }, svg);
+  let paid = `M${x(0)},${y(0)}`;
+  PAID.forEach(p => { paid += `H${x(Math.max(0, p.i))}V${y(p.cum)}`; });
+  el("path", { d: paid + `H${x(last)}`, fill: "none", stroke: "var(--ink)", "stroke-width": 2, "stroke-linejoin": "round" }, svg);
+  el("circle", { cx: x(last), cy: y(cumEarned[last]), r: 4.5, fill: "var(--pos)", stroke: "var(--surface)", "stroke-width": 2 }, svg);
+  const cross = el("line", { y1: M.t, y2: H - M.b, stroke: "var(--ink-3)", "stroke-width": 1, visibility: "hidden" }, svg);
+  const hit = el("rect", { x: M.l, y: 0, width: W - M.l - M.r, height: H, fill: "transparent" }, svg);
+  hit.addEventListener("pointermove", e => {
+    const b = svg.getBoundingClientRect(), px = (e.clientX - b.left) / b.width * W;
+    const i = Math.max(0, Math.min(last, Math.round((px - M.l) / (W - M.l - M.r) * last)));
+    cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+    showTip(e, `<div class="t">End of ${fmtM(MONTHS[i])}</div>` + row("This month", signed(data.monthTotals[i])) + row("Earned", eur(earnedBy(i))) + row("Paid", eur(paidBy(i))) + row("Balance", eur(earnedBy(i) - paidBy(i))));
+  });
+  hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
+  box.appendChild(svg);
+})();
+
+// Subjects: a subject-by-month grid that doubles as the table view of the monthly chart.
+function drawGrid() {
+  const grid = document.getElementById("grid");
+  const idx = visible();
+  const subs = data.subjects.filter(s => idx.some(i => s.months[i].marks.length));
+  if (!subs.length) { grid.innerHTML = `<tbody><tr><td class="empty">No marks yet.</td></tr></tbody>`; return; }
+  const max = Math.max(1, ...subs.flatMap(s => idx.map(i => Math.abs(s.months[i].earned))));
+  const yr = (i, k) => k && yearOf(MONTHS[i]) !== yearOf(MONTHS[idx[k - 1]]) ? " yr" : "";
+  const sum = s => idx.reduce((t, i) => t + s.months[i].earned, 0);
+  grid.innerHTML = `<thead><tr><th>Subject</th>${idx.map((i, k) => `<th class="${yr(i, k)}">${fmtMs(MONTHS[i])}</th>`).join("")}<th>Total</th></tr></thead><tbody>` +
+    subs.map(s => `<tr><td>${s.name}</td>${idx.map((i, k) => {
+      const c = s.months[i];
+      return c.marks.length
+        ? `<td class="c${yr(i, k)}" data-s="${data.subjects.indexOf(s)}" data-i="${i}" style="background:${shade(c.earned, max)}">${signed(c.earned)}</td>`
+        : `<td class="c none${yr(i, k)}">·</td>`;
+    }).join("")}<td class="tot">${signed(sum(s))}</td></tr>`).join("") +
+    `<tr class="sum"><td>All subjects</td>${idx.map((i, k) => `<td class="${yr(i, k)}">${signed(data.monthTotals[i])}</td>`).join("")}<td class="tot">${signed(idx.reduce((t, i) => t + data.monthTotals[i], 0))}</td></tr></tbody>`;
+  grid.querySelectorAll("td[data-s]").forEach(td => {
+    const s = data.subjects[+td.dataset.s], c = s.months[+td.dataset.i];
+    td.addEventListener("pointermove", e => showTip(e, `<div class="t">${s.name} · ${fmtM(c.month)}</div>` +
+      c.marks.map(m => row(`${data.kinds[m.kind]} ${m.mark}${m.date ? ` · ${fmtD(m.date).replace(/ \d{4}$/, "")}` : ""}`, signed(m.eur))).join("") + row("Month", signed(c.earned))));
+    td.addEventListener("pointerleave", hideTip);
+  });
+}
+
+// Latest marks: the most recent month, subject by subject.
+(() => {
+  const box = document.getElementById("latest");
+  if (!MONTHS.length) { box.innerHTML = `<p class="empty">No marks yet.</p>`; return; }
+  document.getElementById("latest-title").textContent = `Marks in ${fmtM(MONTHS[last])}`;
+  const subs = data.subjects.map(s => ({ name: s.name, ...s.months[last] })).filter(s => s.marks.length).sort((a, b) => b.earned - a.earned);
+  box.innerHTML = subs.map(s => `<div class="subj"><div class="name">${s.name}</div><div class="chips">${
+    s.marks.map(m => `<span class="chip" style="background:${shade(m.eur, 20)}" title="${data.kinds[m.kind]} ${m.mark}: ${signed(m.eur)}">${m.kind === "K" ? "<small>K</small>" : ""}${m.mark}</span>`).join("")
+  }</div><div class="eur">${signed(s.earned)}</div></div>`).join("");
+})();
+
+// Payments table
+const formUrl = `https://github.com/${data.repo}/actions/workflows/record-payout.yml`;
+document.getElementById("payments").innerHTML = PAID.length
+  ? `<table><thead><tr><th>Date</th><th>Amount</th><th>Balance after</th></tr></thead><tbody>` +
+    PAID.slice().reverse().map(p => `<tr><td>${p.date.slice(2, 4)}/${p.date.slice(5, 7)}</td><td class="eur">${eur(p.eur)}</td><td>${eur(earnedBy(p.i) - p.cum)}</td></tr>`).join("") +
+    `</tbody></table>`
+  : `<p class="empty">No payments recorded yet. Add one with the <a href="${formUrl}">Record payout</a> form (repo owner only).</p>`;
+
+// Rates table
+const grades = [10, 9, 8, 7, 6];
+document.getElementById("rates").innerHTML = `<thead><tr><th>Mark</th>${grades.map(g => `<th>${g}</th>`).join("")}<th>5 or lower</th></tr></thead><tbody>` +
+  Object.entries(data.rates).map(([k, r]) => `<tr><td>${data.kinds[k]}${k === "K" ? " (K)" : ""}</td>${grades.map(g => `<td>${signed(r[g])}</td>`).join("")}<td>${signed(r.low)}</td></tr>`).join("") + `</tbody>`;
+
+drawFilter(); drawMonthly(); drawGrid();
+</script>

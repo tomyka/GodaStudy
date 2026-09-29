@@ -1,0 +1,12 @@
+{
+  "name": "goda-study",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node --test",
+    "update": "node scripts/update.mjs",
+    "rebuild": "node scripts/update.mjs --offline",
+    "preview": "npx --yes serve site"
+  }
+}

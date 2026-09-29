@@ -1,0 +1,17 @@
+{
+  "student": { "name": "Goda" },
+  "repo": "tomyka/GodaStudy",
+  "years": [
+    { "from": "2025-09", "label": "7th grade" },
+    { "from": "2026-09", "label": "8th grade" }
+  ],
+  "tamo": {
+    "role": "Goda",
+    "testTypes": ["kontrolin"],
+    "subjects": {
+      "Lietuvių kalba": "Lietuvių k.",
+      "Anglų kalba": "Anglų k.",
+      "Prancūzų kalba": "Prancūzų k."
+    }
+  }
+}

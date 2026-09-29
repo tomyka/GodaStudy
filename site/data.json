@@ -1,0 +1,1277 @@
+{
+  "student": {
+    "name": "Goda"
+  },
+  "repo": "tomyka/GodaStudy",
+  "years": [
+    {
+      "from": "2025-09",
+      "label": "7th grade"
+    },
+    {
+      "from": "2026-09",
+      "label": "8th grade"
+    }
+  ],
+  "updatedAt": "2026-09-29",
+  "rates": {
+    "A": {
+      "6": -10,
+      "7": -5,
+      "8": 0,
+      "9": 3,
+      "10": 5,
+      "low": -20
+    },
+    "K": {
+      "6": -20,
+      "7": -10,
+      "8": 0,
+      "9": 10,
+      "10": 20,
+      "low": -50
+    }
+  },
+  "kinds": {
+    "A": "Mark",
+    "K": "Test"
+  },
+  "months": [
+    "2025-09",
+    "2025-10",
+    "2025-11",
+    "2025-12",
+    "2026-01",
+    "2026-02",
+    "2026-03",
+    "2026-04",
+    "2026-05",
+    "2026-06"
+  ],
+  "subjects": [
+    {
+      "name": "Anglų k.",
+      "months": [
+        {
+          "month": "2025-09",
+          "marks": [
+            {
+              "mark": 7,
+              "kind": "A",
+              "eur": -5
+            }
+          ],
+          "earned": -5,
+          "total": -5
+        },
+        {
+          "month": "2025-10",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 8,
+              "kind": "K",
+              "eur": 0
+            }
+          ],
+          "earned": 20,
+          "total": 15
+        },
+        {
+          "month": "2025-11",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 15,
+          "total": 30
+        },
+        {
+          "month": "2025-12",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 7,
+              "kind": "K",
+              "eur": -10
+            }
+          ],
+          "earned": -5,
+          "total": 25
+        },
+        {
+          "month": "2026-01",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 20,
+          "total": 45
+        },
+        {
+          "month": "2026-02",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "K",
+              "eur": 10
+            }
+          ],
+          "earned": 10,
+          "total": 55
+        },
+        {
+          "month": "2026-03",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 8,
+              "kind": "A",
+              "eur": 0
+            }
+          ],
+          "earned": 10,
+          "total": 65
+        },
+        {
+          "month": "2026-04",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 15,
+          "total": 80
+        },
+        {
+          "month": "2026-05",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 7,
+              "kind": "K",
+              "eur": -10
+            }
+          ],
+          "earned": 0,
+          "total": 80
+        },
+        {
+          "month": "2026-06",
+          "marks": [],
+          "earned": 0,
+          "total": 80
+        }
+      ],
+      "total": 80
+    },
+    {
+      "name": "Biologija",
+      "months": [
+        {
+          "month": "2025-09",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2025-10",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            },
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            },
+            {
+              "mark": 9,
+              "kind": "K",
+              "eur": 10
+            }
+          ],
+          "earned": 16,
+          "total": 16
+        },
+        {
+          "month": "2025-11",
+          "marks": [
+            {
+              "mark": 7,
+              "kind": "K",
+              "eur": -10
+            }
+          ],
+          "earned": -10,
+          "total": 6
+        },
+        {
+          "month": "2025-12",
+          "marks": [
+            {
+              "mark": 8,
+              "kind": "A",
+              "eur": 0
+            },
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            },
+            {
+              "mark": 7,
+              "kind": "K",
+              "eur": -10
+            }
+          ],
+          "earned": -7,
+          "total": -1
+        },
+        {
+          "month": "2026-01",
+          "marks": [],
+          "earned": 0,
+          "total": -1
+        },
+        {
+          "month": "2026-02",
+          "marks": [
+            {
+              "mark": 8,
+              "kind": "A",
+              "eur": 0
+            },
+            {
+              "mark": 9,
+              "kind": "K",
+              "eur": 10
+            }
+          ],
+          "earned": 10,
+          "total": 9
+        },
+        {
+          "month": "2026-03",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            },
+            {
+              "mark": 6,
+              "kind": "K",
+              "eur": -20
+            }
+          ],
+          "earned": -17,
+          "total": -8
+        },
+        {
+          "month": "2026-04",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 10,
+          "total": 2
+        },
+        {
+          "month": "2026-05",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 7
+        },
+        {
+          "month": "2026-06",
+          "marks": [],
+          "earned": 0,
+          "total": 7
+        }
+      ],
+      "total": 7
+    },
+    {
+      "name": "Fizika",
+      "months": [
+        {
+          "month": "2025-09",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2025-10",
+          "marks": [
+            {
+              "mark": 8,
+              "kind": "A",
+              "eur": 0
+            }
+          ],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2025-11",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 3,
+          "total": 3
+        },
+        {
+          "month": "2025-12",
+          "marks": [
+            {
+              "mark": 5,
+              "kind": "A",
+              "eur": -20
+            }
+          ],
+          "earned": -20,
+          "total": -17
+        },
+        {
+          "month": "2026-01",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 3,
+          "total": -14
+        },
+        {
+          "month": "2026-02",
+          "marks": [],
+          "earned": 0,
+          "total": -14
+        },
+        {
+          "month": "2026-03",
+          "marks": [
+            {
+              "mark": 7,
+              "kind": "K",
+              "eur": -10
+            }
+          ],
+          "earned": -10,
+          "total": -24
+        },
+        {
+          "month": "2026-04",
+          "marks": [
+            {
+              "mark": 4,
+              "kind": "A",
+              "eur": -20
+            }
+          ],
+          "earned": -20,
+          "total": -44
+        },
+        {
+          "month": "2026-05",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": -39
+        },
+        {
+          "month": "2026-06",
+          "marks": [],
+          "earned": 0,
+          "total": -39
+        }
+      ],
+      "total": -39
+    },
+    {
+      "name": "Geografija",
+      "months": [
+        {
+          "month": "2025-09",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 5
+        },
+        {
+          "month": "2025-10",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 8,
+          "total": 13
+        },
+        {
+          "month": "2025-11",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 18
+        },
+        {
+          "month": "2025-12",
+          "marks": [],
+          "earned": 0,
+          "total": 18
+        },
+        {
+          "month": "2026-01",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 23
+        },
+        {
+          "month": "2026-02",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 10,
+          "total": 33
+        },
+        {
+          "month": "2026-03",
+          "marks": [
+            {
+              "mark": 8,
+              "kind": "A",
+              "eur": 0
+            }
+          ],
+          "earned": 0,
+          "total": 33
+        },
+        {
+          "month": "2026-04",
+          "marks": [],
+          "earned": 0,
+          "total": 33
+        },
+        {
+          "month": "2026-05",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 38
+        },
+        {
+          "month": "2026-06",
+          "marks": [],
+          "earned": 0,
+          "total": 38
+        }
+      ],
+      "total": 38
+    },
+    {
+      "name": "Informatika",
+      "months": [
+        {
+          "month": "2025-09",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2025-10",
+          "marks": [
+            {
+              "mark": 8,
+              "kind": "A",
+              "eur": 0
+            }
+          ],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2025-11",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 5
+        },
+        {
+          "month": "2025-12",
+          "marks": [],
+          "earned": 0,
+          "total": 5
+        },
+        {
+          "month": "2026-01",
+          "marks": [
+            {
+              "mark": 8,
+              "kind": "A",
+              "eur": 0
+            }
+          ],
+          "earned": 0,
+          "total": 5
+        },
+        {
+          "month": "2026-02",
+          "marks": [],
+          "earned": 0,
+          "total": 5
+        },
+        {
+          "month": "2026-03",
+          "marks": [],
+          "earned": 0,
+          "total": 5
+        },
+        {
+          "month": "2026-04",
+          "marks": [],
+          "earned": 0,
+          "total": 5
+        },
+        {
+          "month": "2026-05",
+          "marks": [],
+          "earned": 0,
+          "total": 5
+        },
+        {
+          "month": "2026-06",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 3,
+          "total": 8
+        }
+      ],
+      "total": 8
+    },
+    {
+      "name": "Istorija",
+      "months": [
+        {
+          "month": "2025-09",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 8,
+          "total": 8
+        },
+        {
+          "month": "2025-10",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 3,
+          "total": 11
+        },
+        {
+          "month": "2025-11",
+          "marks": [
+            {
+              "mark": 8,
+              "kind": "A",
+              "eur": 0
+            }
+          ],
+          "earned": 0,
+          "total": 11
+        },
+        {
+          "month": "2025-12",
+          "marks": [],
+          "earned": 0,
+          "total": 11
+        },
+        {
+          "month": "2026-01",
+          "marks": [],
+          "earned": 0,
+          "total": 11
+        },
+        {
+          "month": "2026-02",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 16
+        },
+        {
+          "month": "2026-03",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 21
+        },
+        {
+          "month": "2026-04",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 26
+        },
+        {
+          "month": "2026-05",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 10,
+          "total": 36
+        },
+        {
+          "month": "2026-06",
+          "marks": [],
+          "earned": 0,
+          "total": 36
+        }
+      ],
+      "total": 36
+    },
+    {
+      "name": "Lietuvių k.",
+      "months": [
+        {
+          "month": "2025-09",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2025-10",
+          "marks": [
+            {
+              "mark": 8,
+              "kind": "A",
+              "eur": 0
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 10,
+          "total": 10
+        },
+        {
+          "month": "2025-11",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 4,
+              "kind": "A",
+              "eur": -20
+            }
+          ],
+          "earned": -15,
+          "total": -5
+        },
+        {
+          "month": "2025-12",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 3,
+          "total": -2
+        },
+        {
+          "month": "2026-01",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 3,
+          "total": 1
+        },
+        {
+          "month": "2026-02",
+          "marks": [
+            {
+              "mark": 8,
+              "kind": "A",
+              "eur": 0
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 6
+        },
+        {
+          "month": "2026-03",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 7,
+              "kind": "A",
+              "eur": -5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 7,
+              "kind": "A",
+              "eur": -5
+            }
+          ],
+          "earned": 0,
+          "total": 6
+        },
+        {
+          "month": "2026-04",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 3,
+          "total": 9
+        },
+        {
+          "month": "2026-05",
+          "marks": [
+            {
+              "mark": 7,
+              "kind": "A",
+              "eur": -5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 0,
+          "total": 9
+        },
+        {
+          "month": "2026-06",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 8,
+          "total": 17
+        }
+      ],
+      "total": 17
+    },
+    {
+      "name": "Matematika",
+      "months": [
+        {
+          "month": "2025-09",
+          "marks": [
+            {
+              "mark": 7,
+              "kind": "K",
+              "eur": -10
+            }
+          ],
+          "earned": -10,
+          "total": -10
+        },
+        {
+          "month": "2025-10",
+          "marks": [
+            {
+              "mark": 7,
+              "kind": "A",
+              "eur": -5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 8,
+              "kind": "K",
+              "eur": 0
+            }
+          ],
+          "earned": 0,
+          "total": -10
+        },
+        {
+          "month": "2025-11",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "K",
+              "eur": 10
+            }
+          ],
+          "earned": 10,
+          "total": 0
+        },
+        {
+          "month": "2025-12",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "K",
+              "eur": 20
+            }
+          ],
+          "earned": 20,
+          "total": 20
+        },
+        {
+          "month": "2026-01",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 3,
+          "total": 23
+        },
+        {
+          "month": "2026-02",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            },
+            {
+              "mark": 7,
+              "kind": "K",
+              "eur": -10
+            }
+          ],
+          "earned": -7,
+          "total": 16
+        },
+        {
+          "month": "2026-03",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "K",
+              "eur": 20
+            }
+          ],
+          "earned": 25,
+          "total": 41
+        },
+        {
+          "month": "2026-04",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "K",
+              "eur": 20
+            }
+          ],
+          "earned": 20,
+          "total": 61
+        },
+        {
+          "month": "2026-05",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 9,
+              "kind": "K",
+              "eur": 10
+            }
+          ],
+          "earned": 20,
+          "total": 81
+        },
+        {
+          "month": "2026-06",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 86
+        }
+      ],
+      "total": 86
+    },
+    {
+      "name": "Prancūzų k.",
+      "months": [
+        {
+          "month": "2025-09",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 3,
+          "total": 3
+        },
+        {
+          "month": "2025-10",
+          "marks": [],
+          "earned": 0,
+          "total": 3
+        },
+        {
+          "month": "2025-11",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 3,
+          "total": 6
+        },
+        {
+          "month": "2025-12",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 11
+        },
+        {
+          "month": "2026-01",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 16
+        },
+        {
+          "month": "2026-02",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "K",
+              "eur": 10
+            }
+          ],
+          "earned": 10,
+          "total": 26
+        },
+        {
+          "month": "2026-03",
+          "marks": [],
+          "earned": 0,
+          "total": 26
+        },
+        {
+          "month": "2026-04",
+          "marks": [
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            },
+            {
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 10,
+          "total": 36
+        },
+        {
+          "month": "2026-05",
+          "marks": [
+            {
+              "mark": 9,
+              "kind": "K",
+              "eur": 10
+            }
+          ],
+          "earned": 10,
+          "total": 46
+        },
+        {
+          "month": "2026-06",
+          "marks": [],
+          "earned": 0,
+          "total": 46
+        }
+      ],
+      "total": 46
+    }
+  ],
+  "monthTotals": [
+    1,
+    57,
+    16,
+    -4,
+    39,
+    43,
+    13,
+    43,
+    55,
+    16
+  ],
+  "total": 279
+}
