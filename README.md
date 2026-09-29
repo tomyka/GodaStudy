@@ -41,7 +41,9 @@ Each run fetches the current school year up to the end of last month, and replac
 - `tamo.testTypes` lists fragments of TAMO's assessment type that mean a test. The default is `kontrolin`.
 - `tamo.subjects` shortens TAMO's subject names to the ones the sheet used, for example "Lietuvių kalba ir literatūra" becomes "Lietuvių k.".
 
-Values that are not a mark from 1 to 10 are skipped: attendance ("n"), pass/fail ("įsk") and anything else. The run prints how many of each were skipped.
+- `tamo.paying` lists the subjects whose marks pay: the sheet's nine plus Chemija. Marks in other subjects (Dailė, Muzika, Fizinis ugdymas, Dorinis ugdymas) are skipped.
+
+Only "Kontrolinis darbas" counts as a test; "Testas", "Savarankiškas darbas" and "Klasės darbas" pay regular rates. Values that are not a mark from 1 to 10 are skipped: attendance ("n"), pass/fail ("įsk") and anything else. The run log names everything it skipped, including subjects that do not pay, so a renamed subject is noticed.
 
 ## First-time setup
 

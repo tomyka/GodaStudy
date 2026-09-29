@@ -31,6 +31,16 @@ test("attendance, pass/fail and odd values are skipped and counted", () => {
   assert.deepEqual(skipped, { įsk: 1, n: 2, 11: 1, "no date": 1 });
 });
 
+test("only paying subjects count; the rest are skipped by name", () => {
+  const { marks, skipped } = toMarks([
+    { subject: "Užsienio kalba (pirmoji, anglų)", subjectDate: "2026-09-28", assessmentValue: "10", assessmentType: "Testas" },
+    { subject: "Dailė", subjectDate: "2026-09-09", assessmentValue: "10", assessmentType: "Klasės darbas" },
+    { subject: "Dailė", subjectDate: "2026-09-16", assessmentValue: "10", assessmentType: "Klasės darbas" },
+  ], { ...options, subjects: { "Užsienio kalba (pirmoji, anglų)": "Anglų k." }, paying: ["Anglų k."] });
+  assert.deepEqual(marks, [{ date: "2026-09-28", month: "2026-09", subject: "Anglų k.", mark: 10, kind: "A" }]);
+  assert.deepEqual(skipped, { "Dailė (not paying)": 2 });
+});
+
 test("weeks cover the range Monday to Sunday without overlap", () => {
   assert.deepEqual(weeks("2026-09-01", "2026-09-16"), [
     { dateFrom: "2026-09-01", dateTo: "2026-09-06" },

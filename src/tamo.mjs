@@ -94,7 +94,8 @@ async function fetchDiary(token, role, from, to) {
 // ("n", "p"), pass/fail ("įsk") and anything else is skipped and reported, so a format change is noticed.
 // options.testTypes: lower-case fragments of `assessmentType` that mean a test ("kontrolin").
 // options.subjects: TAMO subject-name prefix -> the name the dashboard uses.
-export function toMarks(items, { testTypes, subjects = {} }) {
+// options.paying: the subjects (dashboard names) whose marks pay; others are skipped as "<subject> (not paying)".
+export function toMarks(items, { testTypes, subjects = {}, paying }) {
   const marks = [];
   const skipped = {};
   for (const item of items) {
@@ -107,12 +108,17 @@ export function toMarks(items, { testTypes, subjects = {} }) {
       skipped[reason] = (skipped[reason] ?? 0) + 1;
       continue;
     }
-    const type = String(item.assessmentType ?? "").toLowerCase();
     const prefix = Object.keys(subjects).find((p) => subject.startsWith(p));
+    const name = prefix ? subjects[prefix] : subject;
+    if (paying && !paying.includes(name)) {
+      skipped[`${name} (not paying)`] = (skipped[`${name} (not paying)`] ?? 0) + 1;
+      continue;
+    }
+    const type = String(item.assessmentType ?? "").toLowerCase();
     marks.push({
       date,
       month: date.slice(0, 7),
-      subject: prefix ? subjects[prefix] : subject,
+      subject: name,
       mark: Number(value),
       kind: testTypes.some((t) => type.includes(t)) ? TEST : REGULAR,
     });

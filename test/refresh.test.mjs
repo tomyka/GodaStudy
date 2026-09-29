@@ -39,7 +39,7 @@ test("the 1 October run adds September and keeps the sheet", async () => {
   const { marks, log } = await refreshMarks({ stored: sheet, tamo, today: "2026-10-01", diary });
   assert.deepEqual(diary.reads, [["2026-09-01", "2026-09-30"]]);
   assert.deepEqual(marks, [...sheet, { date: "2026-09-14", month: "2026-09", subject: "Matematika", mark: 10, kind: "K" }]);
-  assert.deepEqual(log, ["TAMO 2026-09-01..2026-09-30: 1 marks (1 tests)", `Skipped non-mark values: {"n":1}`]);
+  assert.deepEqual(log, ["TAMO 2026-09-01..2026-09-30: 1 marks (1 tests)", `Skipped: {"n":1}`]);
 });
 
 test("a later run replaces the window's marks, so a teacher's correction comes through", async () => {

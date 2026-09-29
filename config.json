@@ -11,8 +11,12 @@
     "testTypes": ["kontrolin"],
     "subjects": {
       "Lietuvių kalba": "Lietuvių k.",
-      "Anglų kalba": "Anglų k.",
-      "Prancūzų kalba": "Prancūzų k."
-    }
+      "Užsienio kalba (pirmoji, anglų)": "Anglų k.",
+      "Užsienio kalba (antroji, prancūzų)": "Prancūzų k."
+    },
+    "paying": [
+      "Anglų k.", "Biologija", "Chemija", "Fizika", "Geografija",
+      "Informatika", "Istorija", "Lietuvių k.", "Matematika", "Prancūzų k."
+    ]
   }
 }

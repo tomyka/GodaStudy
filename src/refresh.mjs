@@ -23,7 +23,7 @@ export async function refreshMarks({ stored, tamo, today, diary, acceptFewer = f
   const { from, to } = window;
   const { marks: fetched, skipped } = toMarks(await diary.read(from, to), tamo);
   const log = [`TAMO ${from}..${to}: ${fetched.length} marks (${fetched.filter((m) => m.kind === TEST).length} tests)`];
-  if (Object.keys(skipped).length) log.push(`Skipped non-mark values: ${JSON.stringify(skipped)}`);
+  if (Object.keys(skipped).length) log.push(`Skipped: ${JSON.stringify(skipped)}`);
 
   const inWindow = (m) => (m.date ? m.date >= from : m.month >= from.slice(0, 7));
   const kept = stored.filter((m) => !inWindow(m));
