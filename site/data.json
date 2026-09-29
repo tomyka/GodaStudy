@@ -110,6 +110,14 @@
       "paidTotal": 279,
       "balance": 0,
       "year": "7th grade"
+    },
+    {
+      "month": "2026-09",
+      "earned": 28,
+      "earnedTotal": 307,
+      "paidTotal": 279,
+      "balance": 28,
+      "year": "8th grade"
     }
   ],
   "subjects": [
@@ -309,9 +317,22 @@
           "marks": [],
           "earned": 0,
           "total": 80
+        },
+        {
+          "month": "2026-09",
+          "marks": [
+            {
+              "date": "2026-09-28",
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 85
         }
       ],
-      "total": 80
+      "total": 85
     },
     {
       "name": "Biologija",
@@ -452,9 +473,94 @@
           "marks": [],
           "earned": 0,
           "total": 7
+        },
+        {
+          "month": "2026-09",
+          "marks": [],
+          "earned": 0,
+          "total": 7
         }
       ],
       "total": 7
+    },
+    {
+      "name": "Chemija",
+      "months": [
+        {
+          "month": "2025-09",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2025-10",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2025-11",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2025-12",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2026-01",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2026-02",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2026-03",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2026-04",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2026-05",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2026-06",
+          "marks": [],
+          "earned": 0,
+          "total": 0
+        },
+        {
+          "month": "2026-09",
+          "marks": [
+            {
+              "date": "2026-09-22",
+              "mark": 8,
+              "kind": "K",
+              "eur": 0
+            }
+          ],
+          "earned": 0,
+          "total": 0
+        }
+      ],
+      "total": 0
     },
     {
       "name": "Fizika",
@@ -557,6 +663,12 @@
         },
         {
           "month": "2026-06",
+          "marks": [],
+          "earned": 0,
+          "total": -39
+        },
+        {
+          "month": "2026-09",
           "marks": [],
           "earned": 0,
           "total": -39
@@ -678,9 +790,22 @@
           "marks": [],
           "earned": 0,
           "total": 38
+        },
+        {
+          "month": "2026-09",
+          "marks": [
+            {
+              "date": "2026-09-24",
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 43
         }
       ],
-      "total": 38
+      "total": 43
     },
     {
       "name": "Informatika",
@@ -768,9 +893,22 @@
           ],
           "earned": 3,
           "total": 8
+        },
+        {
+          "month": "2026-09",
+          "marks": [
+            {
+              "date": "2026-09-22",
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 13
         }
       ],
-      "total": 8
+      "total": 13
     },
     {
       "name": "Istorija",
@@ -886,9 +1024,22 @@
           "marks": [],
           "earned": 0,
           "total": 36
+        },
+        {
+          "month": "2026-09",
+          "marks": [
+            {
+              "date": "2026-09-23",
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 41
         }
       ],
-      "total": 36
+      "total": 41
     },
     {
       "name": "Lietuvių k.",
@@ -1051,9 +1202,22 @@
           ],
           "earned": 8,
           "total": 17
+        },
+        {
+          "month": "2026-09",
+          "marks": [
+            {
+              "date": "2026-09-29",
+              "mark": 9,
+              "kind": "A",
+              "eur": 3
+            }
+          ],
+          "earned": 3,
+          "total": 20
         }
       ],
-      "total": 17
+      "total": 20
     },
     {
       "name": "Matematika",
@@ -1207,9 +1371,28 @@
           ],
           "earned": 5,
           "total": 86
+        },
+        {
+          "month": "2026-09",
+          "marks": [
+            {
+              "date": "2026-09-14",
+              "mark": 8,
+              "kind": "K",
+              "eur": 0
+            },
+            {
+              "date": "2026-09-23",
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": 91
         }
       ],
-      "total": 86
+      "total": 91
     },
     {
       "name": "Prancūzų k.",
@@ -1320,6 +1503,12 @@
           "marks": [],
           "earned": 0,
           "total": 46
+        },
+        {
+          "month": "2026-09",
+          "marks": [],
+          "earned": 0,
+          "total": 46
         }
       ],
       "total": 46
@@ -1391,7 +1580,7 @@
       "balanceAfter": 0
     }
   ],
-  "earned": 279,
+  "earned": 307,
   "paid": 279,
-  "balance": 0
+  "balance": 28
 }

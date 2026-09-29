@@ -658,5 +658,61 @@
     "subject": "Matematika",
     "mark": 10,
     "kind": "A"
+  },
+  {
+    "date": "2026-09-14",
+    "month": "2026-09",
+    "subject": "Matematika",
+    "mark": 8,
+    "kind": "K"
+  },
+  {
+    "date": "2026-09-22",
+    "month": "2026-09",
+    "subject": "Chemija",
+    "mark": 8,
+    "kind": "K"
+  },
+  {
+    "date": "2026-09-22",
+    "month": "2026-09",
+    "subject": "Informatika",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "date": "2026-09-23",
+    "month": "2026-09",
+    "subject": "Istorija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "date": "2026-09-23",
+    "month": "2026-09",
+    "subject": "Matematika",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "date": "2026-09-24",
+    "month": "2026-09",
+    "subject": "Geografija",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "date": "2026-09-28",
+    "month": "2026-09",
+    "subject": "Anglų k.",
+    "mark": 10,
+    "kind": "A"
+  },
+  {
+    "date": "2026-09-29",
+    "month": "2026-09",
+    "subject": "Lietuvių k.",
+    "mark": 9,
+    "kind": "A"
   }
 ]
