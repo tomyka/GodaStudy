@@ -1,28 +1,42 @@
-import { RATES, KIND_NAMES, computeRewards } from "./rewards.mjs";
+import { yearLabels } from "./calendar.mjs";
+import { KINDS, computeRewards } from "./rewards.mjs";
 
-// Replace the marks from `from` (YYYY-MM-DD) onward with a fresh TAMO fetch, keeping older ones
-// (earlier school years and the imported sheet). A fetch with fewer marks than already stored
-// for that period is refused: TAMO glitches or a changed format would otherwise wipe marks.
-export function mergeMarks(existing, fetched, from, { acceptFewer = false } = {}) {
-  const month = from.slice(0, 7);
-  const inPeriod = (m) => (m.date ? m.date >= from : m.month >= month);
-  const kept = existing.filter((m) => !inPeriod(m));
-  const before = existing.length - kept.length;
-  if (fetched.length < before && !acceptFewer) {
-    throw new Error(`TAMO returned ${fetched.length} marks since ${from}, fewer than the ${before} already stored`);
-  }
-  return [...kept, ...fetched];
+// The money view: what was earned and paid by the end of each month, and the balance.
+// A payment counts in the school month its date falls in; a summer payment counts in June, and one
+// before the first month with marks counts in that first month. So "balance after" a payment is
+// everything earned by the end of its month minus everything paid so far, as the sheet's Likutis.
+export function moneyView(months, monthTotals, payouts) {
+  const monthOf = (date) => Math.max(0, months.findLastIndex((m) => m <= date.slice(0, 7)));
+  let paidTotal = 0;
+  const payments = payouts.map((p) => {
+    paidTotal += p.eur;
+    return { ...p, month: months.length ? monthOf(p.date) : null, paidTotal };
+  });
+  let earnedTotal = 0;
+  const timeline = months.map((month, i) => {
+    earnedTotal += monthTotals[i];
+    const paid = payments.filter((p) => p.month <= i).at(-1)?.paidTotal ?? 0;
+    return { month, earned: monthTotals[i], earnedTotal, paidTotal: paid, balance: earnedTotal - paid };
+  });
+  for (const p of payments) p.balanceAfter = (p.month === null ? 0 : timeline[p.month].earnedTotal) - p.paidTotal;
+  return { timeline, payments, earned: earnedTotal, paid: paidTotal, balance: earnedTotal - paidTotal };
 }
 
-// Everything the dashboard draws.
-export function buildReport(config, marks, updatedAt) {
+// Everything the dashboard draws. The page only lays it out.
+export function buildReport(config, marks, payouts, updatedAt) {
+  const yearOf = yearLabels(config.years);
+  const { months, subjects, monthTotals } = computeRewards(marks);
+  const money = moneyView(months, monthTotals, payouts);
   return {
     student: config.student,
     repo: config.repo,
-    years: config.years,
     updatedAt,
-    rates: RATES,
-    kinds: KIND_NAMES,
-    ...computeRewards(marks),
+    kinds: KINDS,
+    months: money.timeline.map((t) => ({ ...t, year: yearOf(t.month) })),
+    subjects,
+    payments: money.payments,
+    earned: money.earned,
+    paid: money.paid,
+    balance: money.balance,
   };
 }

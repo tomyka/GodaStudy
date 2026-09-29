@@ -14,7 +14,7 @@ Every mark pays a fixed amount. A test (kontrolinis darbas, "K") counts about do
 - Earnings add up across all subjects and months.
 - The balance is what was earned minus what was paid. It can go below zero, meaning she was paid ahead, and it carries over.
 
-The rates come from the formulas in the "Godos mokslo pasiekimai" sheet. They live in `src/rewards.mjs` and are covered by `test/rewards.test.mjs`.
+The rates come from the formulas in the "Godos mokslo pasiekimai" sheet. They live in `src/rewards.mjs` and are covered by `test/rewards.test.mjs`. The balance, and which month a payment counts in, is worked out in `src/report.mjs`. A test checks it follows the sheet's Likutis month by month.
 
 ## Where the marks come from
 
@@ -72,7 +72,7 @@ Values that are not a mark from 1 to 10 are skipped: attendance ("n"), pass/fail
    - rewrites `site/marks.json` and `site/data.json`,
    - commits and pushes if anything changed,
    - writes a log to `scripts/monthly.log`.
-3. The push triggers `.github/workflows/update.yml`, which runs the tests and publishes `site/` to GitHub Pages.
+3. The push triggers `.github/workflows/update.yml`, which runs the tests, rebuilds `site/data.json` from the stored marks and payments, and publishes `site/` to GitHub Pages.
 
 To refresh now, run `pwsh scripts/monthly.ps1` or `Start-ScheduledTask "GodaStudy monthly TAMO update"`.
 
@@ -105,6 +105,16 @@ The form also works in the GitHub mobile app. Only the repo owner can run it. Th
 - **Pay table:** what each mark is worth.
 
 To add a new school year, add an entry to `years` in `config.json`, then run `npm run rebuild`.
+
+## Code layout
+
+- `src/calendar.mjs`: school months and years.
+- `src/rewards.mjs`: mark kinds and rates, and euros per subject and month.
+- `src/report.mjs`: the money view (earned, paid, balance) and everything `data.json` holds.
+- `src/refresh.mjs`: one monthly refresh, including its window and the replace-and-keep rules. It reads from a diary source.
+- `src/tamo.mjs`: the TAMO protocol and `tamoDiary`, the real diary source. Tests use a fake one.
+
+The page (`site/index.html`) only draws `data.json`. `CONTEXT.md` defines the domain terms.
 
 ## Local use
 

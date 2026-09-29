@@ -3,50 +3,114 @@
     "name": "Goda"
   },
   "repo": "tomyka/GodaStudy",
-  "years": [
-    {
-      "from": "2025-09",
-      "label": "7th grade"
-    },
-    {
-      "from": "2026-09",
-      "label": "8th grade"
-    }
-  ],
   "updatedAt": "2026-09-29",
-  "rates": {
+  "kinds": {
     "A": {
-      "6": -10,
-      "7": -5,
-      "8": 0,
-      "9": 3,
-      "10": 5,
-      "low": -20
+      "name": "Mark",
+      "tag": "",
+      "rates": {
+        "6": -10,
+        "7": -5,
+        "8": 0,
+        "9": 3,
+        "10": 5,
+        "low": -20
+      }
     },
     "K": {
-      "6": -20,
-      "7": -10,
-      "8": 0,
-      "9": 10,
-      "10": 20,
-      "low": -50
+      "name": "Test",
+      "tag": "K",
+      "rates": {
+        "6": -20,
+        "7": -10,
+        "8": 0,
+        "9": 10,
+        "10": 20,
+        "low": -50
+      }
     }
   },
-  "kinds": {
-    "A": "Mark",
-    "K": "Test"
-  },
   "months": [
-    "2025-09",
-    "2025-10",
-    "2025-11",
-    "2025-12",
-    "2026-01",
-    "2026-02",
-    "2026-03",
-    "2026-04",
-    "2026-05",
-    "2026-06"
+    {
+      "month": "2025-09",
+      "earned": 1,
+      "earnedTotal": 1,
+      "paidTotal": 0,
+      "balance": 1,
+      "year": "7th grade"
+    },
+    {
+      "month": "2025-10",
+      "earned": 57,
+      "earnedTotal": 58,
+      "paidTotal": 58,
+      "balance": 0,
+      "year": "7th grade"
+    },
+    {
+      "month": "2025-11",
+      "earned": 16,
+      "earnedTotal": 74,
+      "paidTotal": 71,
+      "balance": 3,
+      "year": "7th grade"
+    },
+    {
+      "month": "2025-12",
+      "earned": -4,
+      "earnedTotal": 70,
+      "paidTotal": 71,
+      "balance": -1,
+      "year": "7th grade"
+    },
+    {
+      "month": "2026-01",
+      "earned": 39,
+      "earnedTotal": 109,
+      "paidTotal": 96,
+      "balance": 13,
+      "year": "7th grade"
+    },
+    {
+      "month": "2026-02",
+      "earned": 43,
+      "earnedTotal": 152,
+      "paidTotal": 152,
+      "balance": 0,
+      "year": "7th grade"
+    },
+    {
+      "month": "2026-03",
+      "earned": 13,
+      "earnedTotal": 165,
+      "paidTotal": 175,
+      "balance": -10,
+      "year": "7th grade"
+    },
+    {
+      "month": "2026-04",
+      "earned": 43,
+      "earnedTotal": 208,
+      "paidTotal": 228,
+      "balance": -20,
+      "year": "7th grade"
+    },
+    {
+      "month": "2026-05",
+      "earned": 55,
+      "earnedTotal": 263,
+      "paidTotal": 253,
+      "balance": 10,
+      "year": "7th grade"
+    },
+    {
+      "month": "2026-06",
+      "earned": 16,
+      "earnedTotal": 279,
+      "paidTotal": 279,
+      "balance": 0,
+      "year": "7th grade"
+    }
   ],
   "subjects": [
     {
@@ -1261,17 +1325,73 @@
       "total": 46
     }
   ],
-  "monthTotals": [
-    1,
-    57,
-    16,
-    -4,
-    39,
-    43,
-    13,
-    43,
-    55,
-    16
+  "payments": [
+    {
+      "date": "2025-10-31",
+      "eur": 58,
+      "note": "from sheet",
+      "month": 1,
+      "paidTotal": 58,
+      "balanceAfter": 0
+    },
+    {
+      "date": "2025-11-30",
+      "eur": 13,
+      "note": "from sheet",
+      "month": 2,
+      "paidTotal": 71,
+      "balanceAfter": 3
+    },
+    {
+      "date": "2026-01-31",
+      "eur": 25,
+      "note": "from sheet",
+      "month": 4,
+      "paidTotal": 96,
+      "balanceAfter": 13
+    },
+    {
+      "date": "2026-02-28",
+      "eur": 56,
+      "note": "from sheet",
+      "month": 5,
+      "paidTotal": 152,
+      "balanceAfter": 0
+    },
+    {
+      "date": "2026-03-31",
+      "eur": 23,
+      "note": "from sheet",
+      "month": 6,
+      "paidTotal": 175,
+      "balanceAfter": -10
+    },
+    {
+      "date": "2026-04-30",
+      "eur": 53,
+      "note": "from sheet",
+      "month": 7,
+      "paidTotal": 228,
+      "balanceAfter": -20
+    },
+    {
+      "date": "2026-05-31",
+      "eur": 25,
+      "note": "from sheet",
+      "month": 8,
+      "paidTotal": 253,
+      "balanceAfter": 10
+    },
+    {
+      "date": "2026-06-30",
+      "eur": 26,
+      "note": "from sheet",
+      "month": 9,
+      "paidTotal": 279,
+      "balanceAfter": 0
+    }
   ],
-  "total": 279
+  "earned": 279,
+  "paid": 279,
+  "balance": 0
 }

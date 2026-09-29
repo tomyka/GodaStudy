@@ -1,6 +1,8 @@
 // TAMO e-diary, through the unofficial API behind the TAMO IŠMANIEMS app, as documented at
 // https://github.com/sobakintech/tamo-dienynas-api. It is not a public API: TAMO's terms forbid
 // this kind of access and it may need an active TAMO IŠMANIEMS subscription. Only reads are made.
+import { REGULAR, TEST } from "./rewards.mjs";
+
 const LOGIN_URL = "https://dienynas.tamo.lt/MobileServiceV3/AuthenticateV2";
 const API = "https://api.tamo.lt/";
 // The Android app's build constant, not a per-device id.
@@ -21,7 +23,7 @@ async function readJson(res, what) {
   }
 }
 
-export async function login(username, password) {
+async function login(username, password) {
   const res = await fetch(LOGIN_URL, {
     method: "POST",
     headers: { ...HEADERS, "Content-Type": "application/json; charset=UTF-8" },
@@ -56,7 +58,7 @@ export function selectRole(roles, match) {
   return found[0].id;
 }
 
-export async function fetchRole(token, match) {
+async function fetchRole(token, match) {
   await get(token, "core/app/settings/StyleRef"); // the app always asks for this before the roles
   const { roles } = await get(token, "core/app/roles");
   if (!Array.isArray(roles) || !roles.length) throw new Error("TAMO returned no roles");
@@ -78,7 +80,7 @@ export function weeks(from, to) {
   return ranges;
 }
 
-export async function fetchDiary(token, role, from, to) {
+async function fetchDiary(token, role, from, to) {
   const items = [];
   for (const query of weeks(from, to)) {
     const body = await get(token, "core/app/dienynas", { role, query });
@@ -112,30 +114,23 @@ export function toMarks(items, { testTypes, subjects = {} }) {
       month: date.slice(0, 7),
       subject: prefix ? subjects[prefix] : subject,
       mark: Number(value),
-      kind: testTypes.some((t) => type.includes(t)) ? "K" : "A",
+      kind: testTypes.some((t) => type.includes(t)) ? TEST : REGULAR,
     });
   }
   marks.sort((a, b) => a.date.localeCompare(b.date) || a.subject.localeCompare(b.subject, "lt"));
   return { marks, skipped };
 }
 
-// 1 September of the school year that `day` (YYYY-MM-DD) falls in.
-export const schoolYearStart = (day) => `${Number(day.slice(0, 4)) - (day.slice(5, 7) < "09" ? 1 : 0)}-09-01`;
-
-// The last day of the month before `today`: a month is settled once it is over, so a run on
-// the 1st never shows the first few marks of the new month.
-export function previousMonthEnd(today) {
-  const day = new Date(`${today.slice(0, 7)}-01T00:00:00Z`);
-  day.setUTCDate(0);
-  return day.toISOString().slice(0, 10);
-}
-
-// The dates a run on `today` fetches: the school year up to the end of last month (a July or
-// August run re-reads the year just ended), but never before `tamoFrom`, the day TAMO took over
-// from the imported sheet. Null when there is nothing to fetch yet.
-export function fetchWindow(today, tamoFrom) {
-  const to = previousMonthEnd(today);
-  const yearStart = schoolYearStart(to);
-  const from = yearStart > tamoFrom ? yearStart : tamoFrom;
-  return from <= to ? { from, to } : null;
+// The diary source the refresh reads marks from: logs in on first use, then returns the raw diary
+// items of from..to. roleMatch picks the child (see selectRole).
+export function tamoDiary(username, password, roleMatch) {
+  let session;
+  return {
+    async read(from, to) {
+      if (!username || !password) throw new Error("Set TAMO_USERNAME and TAMO_PASSWORD, or pass --offline");
+      session ??= login(username, password).then(async (token) => ({ token, role: await fetchRole(token, roleMatch) }));
+      const { token, role } = await session;
+      return fetchDiary(token, role, from, to);
+    },
+  };
 }

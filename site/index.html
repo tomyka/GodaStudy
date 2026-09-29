@@ -83,7 +83,7 @@ table.grid td.yr { box-shadow: -2px 0 0 var(--line); }
 .latest .name { font-weight: 500; font-size: .9rem; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip { font: 500 .8rem/1 var(--f-mono); border-radius: 6px; padding: 6px 8px; border: 1px solid var(--line); display: inline-flex; gap: 4px; align-items: baseline; }
-.chip small { font-size: .68rem; color: var(--ink-3); }
+.chip small { font-size: .68rem; color: inherit; opacity: .7; }
 .latest .eur { font: 600 .85rem/1 var(--f-mono); text-align: right; font-variant-numeric: tabular-nums; }
 @media (max-width: 520px) { .latest .subj { grid-template-columns: 1fr auto; } .latest .chips { grid-column: 1 / -1; grid-row: 2; } }
 
@@ -175,6 +175,7 @@ a { color: inherit; }
 <div class="tip" id="tip" hidden></div>
 
 <script type="module">
+// Everything is worked out in data.json (src/report.mjs); this script only lays it out.
 const NS = "http://www.w3.org/2000/svg";
 const el = (tag, attrs = {}, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; };
 const toDate = m => new Date(+m.slice(0, 4), +m.slice(5, 7) - 1, 1);
@@ -183,39 +184,27 @@ const fmtMs = m => toDate(m).toLocaleDateString("en-GB", { month: "short" });
 const fmtD = d => new Date(`${d}T12:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 const eur = n => (n < 0 ? "−" : "") + "€" + Math.abs(n).toLocaleString("en-GB", { maximumFractionDigits: 2 });
 const signed = n => (n > 0 ? "+" : "") + eur(n);
-const markText = m => (m.kind === "K" ? "K" : "") + m.mark;
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
 // Shade for a euro amount: blue for earned, red for lost, grey for zero; stronger with size.
 const shade = (v, max) => v === 0 ? "var(--zero)" : `color-mix(in oklab, ${v > 0 ? "var(--pos)" : "var(--neg)"} ${Math.round(18 + 57 * Math.min(1, Math.abs(v) / max))}%, var(--surface))`;
 
-const getJson = async (file) => {
-  const res = await fetch(file, { cache: "no-cache" });
-  if (!res.ok) throw new Error(`${file}: HTTP ${res.status}`);
-  return res.json();
-};
-let data, payments;
+let data;
 try {
-  [data, payments] = await Promise.all([getJson("data.json"), getJson("payouts.json").catch(() => [])]);
+  const res = await fetch("data.json", { cache: "no-cache" });
+  if (!res.ok) throw new Error(`data.json: HTTP ${res.status}`);
+  data = await res.json();
 } catch (err) {
   document.querySelector(".wrap").insertAdjacentHTML("beforeend", `<p class="error">Could not load the marks (${err.message}).</p>`);
   throw err;
 }
 
-const MONTHS = data.months;
+const T = data.months; // one entry per school month: month, year, earned, earnedTotal, paidTotal, balance
+const MONTHS = T.map(t => t.month);
 const last = MONTHS.length - 1;
-// The school year a month belongs to; months before the first configured year get an unnamed one.
-const NO_YEAR = { from: "", label: "" };
-const yearOf = m => data.years.filter(y => y.from <= m).at(-1) ?? NO_YEAR;
+const PAID = data.payments.filter(p => p.month !== null);
+const markText = m => data.kinds[m.kind].tag + m.mark;
 // Whether the k-th of the month indexes idx begins a new school year.
-const startsYear = (idx, k) => k > 0 && yearOf(MONTHS[idx[k]]) !== yearOf(MONTHS[idx[k - 1]]);
-const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-const monthIndexOf = date => { let i = -1; while (i < last && MONTHS[i + 1] <= date.slice(0, 7)) i++; return i; };
-const cumEarned = []; MONTHS.forEach((_, i) => cumEarned.push((cumEarned[i - 1] ?? 0) + data.monthTotals[i]));
-const earnedBy = i => i < 0 ? 0 : cumEarned[i];
-let paidSoFar = 0;
-const PAID = payments.map(p => { paidSoFar += p.eur; return { ...p, cum: paidSoFar, i: monthIndexOf(p.date) }; });
-const paidTotal = paidSoFar;
-const paidBy = i => PAID.filter(p => p.i <= i).at(-1)?.cum ?? 0;
-const balance = data.total - paidTotal;
+const startsYear = (idx, k) => k > 0 && T[idx[k]].year !== T[idx[k - 1]].year;
 // The subjects that had marks in month i, best first.
 const subjectsIn = i => data.subjects.map(s => ({ name: s.name, ...s.months[i] })).filter(s => s.marks.length).sort((a, b) => b.earned - a.earned);
 
@@ -224,12 +213,11 @@ document.title = `${data.student.name} Study Rewards`;
 document.getElementById("title").textContent = `${data.student.name}'s study rewards`;
 document.getElementById("meta").textContent = MONTHS.length ? `Study rewards · marks to ${fmtM(MONTHS[last])}` : "Study rewards";
 document.getElementById("footer").innerHTML = `Marks from the TAMO e-diary, refreshed on the 1st of each month (the 7th grade was imported from the family sheet). Last updated ${fmtD(data.updatedAt)}.`;
-const lastPaid = PAID.at(-1);
-const thisMonth = data.monthTotals[last] ?? 0;
+const lastPaid = data.payments.at(-1);
 document.getElementById("money-tiles").innerHTML =
-  `<div class="tile lead"><div class="k">${balance >= 0 ? "Owed now" : "Paid ahead"}</div><div class="v">${eur(Math.abs(balance))}</div><div class="d">earned minus paid</div></div>` +
-  `<div class="tile"><div class="k"><i class="sw-line" style="background:var(--pos)"></i>Total earned</div><div class="v">${eur(data.total)}</div><div class="d">${MONTHS.length ? `${signed(thisMonth)} in ${fmtM(MONTHS[last])}` : "no marks yet"}</div></div>` +
-  `<div class="tile"><div class="k"><i class="sw-line" style="background:var(--ink)"></i>Total paid</div><div class="v">${eur(paidTotal)}</div><div class="d">${lastPaid ? `last ${fmtD(lastPaid.date)}` : "no payments yet"}</div></div>`;
+  `<div class="tile lead"><div class="k">${data.balance >= 0 ? "Owed now" : "Paid ahead"}</div><div class="v">${eur(Math.abs(data.balance))}</div><div class="d">earned minus paid</div></div>` +
+  `<div class="tile"><div class="k"><i class="sw-line" style="background:var(--pos)"></i>Total earned</div><div class="v">${eur(data.earned)}</div><div class="d">${MONTHS.length ? `${signed(T[last].earned)} in ${fmtM(MONTHS[last])}` : "no marks yet"}</div></div>` +
+  `<div class="tile"><div class="k"><i class="sw-line" style="background:var(--ink)"></i>Total paid</div><div class="v">${eur(data.paid)}</div><div class="d">${lastPaid ? `last ${fmtD(lastPaid.date)}` : "no payments yet"}</div></div>`;
 
 // Tooltip
 const tip = document.getElementById("tip");
@@ -243,21 +231,19 @@ function showTip(e, html) {
 }
 const hideTip = () => tip.hidden = true;
 const row = (label, val) => `<div class="row"><span>${label}</span><span>${val}</span></div>`;
-const monthTip = i => {
-  return `<div class="t">${fmtM(MONTHS[i])} · ${signed(data.monthTotals[i])}</div>` +
-    subjectsIn(i).map(s => row(esc(s.name), `${s.marks.map(markText).join(" ")} · ${signed(s.earned)}`)).join("");
-};
+const monthTip = i => `<div class="t">${fmtM(MONTHS[i])} · ${signed(T[i].earned)}</div>` +
+  subjectsIn(i).map(s => row(esc(s.name), `${s.marks.map(markText).join(" ")} · ${signed(s.earned)}`)).join("");
 
 // Year filter: redraws the monthly chart and the subject grid for one school year, or all of them.
-const withMarks = data.years.filter(y => MONTHS.some(m => yearOf(m) === y));
-let year = withMarks.at(-1) ?? null;
+const YEARS = [...new Set(T.map(t => t.year))];
+let year = YEARS.at(-1) ?? null;
 const filter = document.getElementById("filter");
 function drawFilter() {
-  const opts = [...withMarks.map(y => [y.label, y]), ["All years", null]];
-  filter.innerHTML = `<span class="lab">School year</span>` + opts.map(([label], k) => `<button type="button" data-k="${k}" aria-pressed="${opts[k][1] === year}">${label}</button>`).join("");
+  const opts = [...YEARS.map(y => [y || "Earlier", y]), ["All years", null]];
+  filter.innerHTML = `<span class="lab">School year</span>` + opts.map(([label, y], k) => `<button type="button" data-k="${k}" aria-pressed="${y === year}">${esc(label)}</button>`).join("");
   filter.querySelectorAll("button").forEach(b => b.onclick = () => { year = opts[+b.dataset.k][1]; drawFilter(); drawMonthly(); drawGrid(); });
 }
-const visible = () => MONTHS.map((m, i) => i).filter(i => !year || yearOf(MONTHS[i]) === year);
+const visible = () => T.map((t, i) => i).filter(i => year === null || T[i].year === year);
 
 // Month by month: one bar per school month, from a zero baseline; a gap separates school years.
 const W = 720;
@@ -268,11 +254,10 @@ function drawMonthly() {
   if (!idx.length) { box.innerHTML = `<p class="empty">No marks yet.</p>`; return; }
   const H = 240, M = { l: 48, r: 8, t: 14, b: 34 };
   const breaks = idx.filter((i, k) => startsYear(idx, k)).length;
-  const slots = idx.length + breaks * .8;
-  const slotW = (W - M.l - M.r) / slots;
+  const slotW = (W - M.l - M.r) / (idx.length + breaks * .8);
   const xs = []; let pos = 0;
   idx.forEach((i, k) => { if (startsYear(idx, k)) pos += .8; xs.push(M.l + (pos + .5) * slotW); pos++; });
-  const vals = idx.map(i => data.monthTotals[i]);
+  const vals = idx.map(i => T[i].earned);
   // Gridlines every €10, €20, €50... so there are about four of them whatever the amounts.
   const span = Math.max(20, ...vals) - Math.min(0, ...vals);
   const step = [10, 20, 50, 100, 200, 500, 1000].find(s => span / s <= 5) ?? 1000;
@@ -296,7 +281,7 @@ function drawMonthly() {
     }
     const t = el("text", { x, y: H - 18, "text-anchor": "middle" }, svg); t.textContent = fmtMs(MONTHS[i]);
     if (!k || startsYear(idx, k)) {
-      const yl = el("text", { x: x - bw / 2, y: H - 3, "text-anchor": "start" }, svg); yl.textContent = yearOf(MONTHS[i]).label;
+      const yl = el("text", { x: x - bw / 2, y: H - 3, "text-anchor": "start" }, svg); yl.textContent = T[i].year;
     }
     const hit = el("rect", { x: x - slotW / 2, y: 0, width: slotW, height: H - M.b, fill: "transparent" }, svg);
     hit.addEventListener("pointermove", e => showTip(e, monthTip(i)));
@@ -311,31 +296,31 @@ function drawMonthly() {
   if (!MONTHS.length) { box.innerHTML = `<p class="empty">No marks yet.</p>`; return; }
   const H = 240, M = { l: 52, r: 8, t: 10, b: 22 };
   const x = i => M.l + (last ? i / last : .5) * (W - M.l - M.r);
-  const max = Math.max(100, Math.ceil(Math.max(...cumEarned, paidTotal) / 100) * 100);
-  const min = Math.min(0, Math.floor(Math.min(...cumEarned) / 100) * 100);
+  const max = Math.max(100, Math.ceil(Math.max(...T.map(t => t.earnedTotal), data.paid) / 100) * 100);
+  const min = Math.min(0, Math.floor(Math.min(...T.map(t => t.earnedTotal)) / 100) * 100);
   const y = v => M.t + (max - v) / (max - min) * (H - M.t - M.b);
   const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Running totals of euros earned and paid" });
   for (let v = min; v <= max; v += (max - min) / 4) {
     el("line", { x1: M.l, x2: W - M.r, y1: y(v), y2: y(v), stroke: v ? "var(--grid)" : "var(--line)" }, svg);
     const t = el("text", { x: M.l - 8, y: y(v) + 4, "text-anchor": "end" }, svg); t.textContent = eur(v);
   }
-  const all = MONTHS.map((m, i) => i);
-  all.forEach(i => { if (!i || startsYear(all, i)) { const t = el("text", { x: x(i), y: H - 6, "text-anchor": i ? "middle" : "start" }, svg); t.textContent = yearOf(MONTHS[i]).label; } });
+  const all = T.map((t, i) => i);
+  all.forEach(i => { if (!i || startsYear(all, i)) { const t = el("text", { x: x(i), y: H - 6, "text-anchor": !i ? "start" : i === last ? "end" : "middle" }, svg); t.textContent = T[i].year; } });
   // Earned is counted at each month's end: the point for month i is the total after it.
-  el("path", { d: `M${x(0)},${y(0)}` + cumEarned.map((v, i) => `L${x(i)},${y(v)}`).join(""), fill: "none", stroke: "var(--pos)", "stroke-width": 2, "stroke-linejoin": "round" }, svg);
-  let paid = `M${x(0)},${y(0)}`;
+  el("path", { d: `M${x(0)},${y(0)}` + T.map((t, i) => `L${x(i)},${y(t.earnedTotal)}`).join(""), fill: "none", stroke: "var(--pos)", "stroke-width": 2, "stroke-linejoin": "round" }, svg);
   // Month i's point is its end, so a payment on day d of month i sits about d/30 of the way there from month i-1.
-  const xDate = p => x(Math.max(0, p.i - 1 + (p.date.slice(0, 7) === MONTHS[p.i] ? Math.min(1, +p.date.slice(8) / 30) : 1)));
-  PAID.forEach(p => { paid += `H${xDate(p)}V${y(p.cum)}`; });
+  const xDate = p => x(Math.max(0, p.month - 1 + (p.date.slice(0, 7) === MONTHS[p.month] ? Math.min(1, +p.date.slice(8) / 30) : 1)));
+  let paid = `M${x(0)},${y(0)}`;
+  PAID.forEach(p => { paid += `H${xDate(p)}V${y(p.paidTotal)}`; });
   el("path", { d: paid + `H${x(last)}`, fill: "none", stroke: "var(--ink)", "stroke-width": 2, "stroke-linejoin": "round" }, svg);
-  el("circle", { cx: x(last), cy: y(cumEarned[last]), r: 4.5, fill: "var(--pos)", stroke: "var(--surface)", "stroke-width": 2 }, svg);
+  el("circle", { cx: x(last), cy: y(T[last].earnedTotal), r: 4.5, fill: "var(--pos)", stroke: "var(--surface)", "stroke-width": 2 }, svg);
   const cross = el("line", { y1: M.t, y2: H - M.b, stroke: "var(--ink-3)", "stroke-width": 1, visibility: "hidden" }, svg);
   const hit = el("rect", { x: M.l, y: 0, width: W - M.l - M.r, height: H, fill: "transparent" }, svg);
   hit.addEventListener("pointermove", e => {
     const b = svg.getBoundingClientRect(), px = (e.clientX - b.left) / b.width * W;
     const i = Math.max(0, Math.min(last, Math.round((px - M.l) / (W - M.l - M.r) * last)));
     cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
-    showTip(e, `<div class="t">End of ${fmtM(MONTHS[i])}</div>` + row("This month", signed(data.monthTotals[i])) + row("Earned", eur(earnedBy(i))) + row("Paid", eur(paidBy(i))) + row("Balance", eur(earnedBy(i) - paidBy(i))));
+    showTip(e, `<div class="t">End of ${fmtM(MONTHS[i])}</div>` + row("This month", signed(T[i].earned)) + row("Earned", eur(T[i].earnedTotal)) + row("Paid", eur(T[i].paidTotal)) + row("Balance", eur(T[i].balance)));
   });
   hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
   box.appendChild(svg);
@@ -348,20 +333,20 @@ function drawGrid() {
   const subs = data.subjects.filter(s => idx.some(i => s.months[i].marks.length));
   if (!subs.length) { grid.innerHTML = `<tbody><tr><td class="empty">No marks yet.</td></tr></tbody>`; return; }
   const max = Math.max(1, ...subs.flatMap(s => idx.map(i => Math.abs(s.months[i].earned))));
-  const yr = (i, k) => startsYear(idx, k) ? " yr" : "";
+  const yr = k => startsYear(idx, k) ? " yr" : "";
   const sum = s => idx.reduce((t, i) => t + s.months[i].earned, 0);
-  grid.innerHTML = `<thead><tr><th>Subject</th>${idx.map((i, k) => `<th class="${yr(i, k)}">${fmtMs(MONTHS[i])}</th>`).join("")}<th>Total</th></tr></thead><tbody>` +
+  grid.innerHTML = `<thead><tr><th>Subject</th>${idx.map((i, k) => `<th class="${yr(k)}">${fmtMs(MONTHS[i])}</th>`).join("")}<th>Total</th></tr></thead><tbody>` +
     subs.map(s => `<tr><td>${esc(s.name)}</td>${idx.map((i, k) => {
       const c = s.months[i];
       return c.marks.length
-        ? `<td class="c${yr(i, k)}" data-s="${data.subjects.indexOf(s)}" data-i="${i}" style="background:${shade(c.earned, max)}">${signed(c.earned)}</td>`
-        : `<td class="c none${yr(i, k)}">·</td>`;
+        ? `<td class="c${yr(k)}" data-s="${data.subjects.indexOf(s)}" data-i="${i}" style="background:${shade(c.earned, max)}">${signed(c.earned)}</td>`
+        : `<td class="c none${yr(k)}">·</td>`;
     }).join("")}<td class="tot">${signed(sum(s))}</td></tr>`).join("") +
-    `<tr class="sum"><td>All subjects</td>${idx.map((i, k) => `<td class="${yr(i, k)}">${signed(data.monthTotals[i])}</td>`).join("")}<td class="tot">${signed(idx.reduce((t, i) => t + data.monthTotals[i], 0))}</td></tr></tbody>`;
+    `<tr class="sum"><td>All subjects</td>${idx.map((i, k) => `<td class="${yr(k)}">${signed(T[i].earned)}</td>`).join("")}<td class="tot">${signed(idx.reduce((t, i) => t + T[i].earned, 0))}</td></tr></tbody>`;
   grid.querySelectorAll("td[data-s]").forEach(td => {
     const s = data.subjects[+td.dataset.s], c = s.months[+td.dataset.i];
     td.addEventListener("pointermove", e => showTip(e, `<div class="t">${esc(s.name)} · ${fmtM(c.month)}</div>` +
-      c.marks.map(m => row(`${data.kinds[m.kind]} ${m.mark}${m.date ? ` · ${fmtD(m.date).replace(/ \d{4}$/, "")}` : ""}`, signed(m.eur))).join("") + row("Month", signed(c.earned))));
+      c.marks.map(m => row(`${data.kinds[m.kind].name} ${m.mark}${m.date ? ` · ${fmtD(m.date).replace(/ \d{4}$/, "")}` : ""}`, signed(m.eur))).join("") + row("Month", signed(c.earned))));
     td.addEventListener("pointerleave", hideTip);
   });
 }
@@ -372,22 +357,22 @@ function drawGrid() {
   if (!MONTHS.length) { box.innerHTML = `<p class="empty">No marks yet.</p>`; return; }
   document.getElementById("latest-title").textContent = `Marks in ${fmtM(MONTHS[last])}`;
   box.innerHTML = subjectsIn(last).map(s => `<div class="subj"><div class="name">${esc(s.name)}</div><div class="chips">${
-    s.marks.map(m => `<span class="chip" style="background:${shade(m.eur, 20)}" title="${data.kinds[m.kind]} ${m.mark}: ${signed(m.eur)}">${m.kind === "K" ? "<small>K</small>" : ""}${m.mark}</span>`).join("")
+    s.marks.map(m => `<span class="chip" style="background:${shade(m.eur, 20)}" title="${data.kinds[m.kind].name} ${m.mark}: ${signed(m.eur)}">${data.kinds[m.kind].tag ? `<small>${data.kinds[m.kind].tag}</small>` : ""}${m.mark}</span>`).join("")
   }</div><div class="eur">${signed(s.earned)}</div></div>`).join("");
 })();
 
 // Payments table
 const formUrl = `https://github.com/${data.repo}/actions/workflows/record-payout.yml`;
-document.getElementById("payments").innerHTML = PAID.length
+document.getElementById("payments").innerHTML = data.payments.length
   ? `<table><thead><tr><th>Date</th><th>Amount</th><th>Balance after</th></tr></thead><tbody>` +
-    PAID.slice().reverse().map(p => `<tr><td>${p.date.slice(2, 4)}/${p.date.slice(5, 7)}</td><td class="eur">${eur(p.eur)}</td><td>${eur(earnedBy(p.i) - p.cum)}</td></tr>`).join("") +
+    data.payments.slice().reverse().map(p => `<tr><td>${p.date.slice(2, 4)}/${p.date.slice(5, 7)}</td><td class="eur">${eur(p.eur)}</td><td>${eur(p.balanceAfter)}</td></tr>`).join("") +
     `</tbody></table>`
   : `<p class="empty">No payments recorded yet. Add one with the <a href="${formUrl}">Record payout</a> form (repo owner only).</p>`;
 
 // Rates table
 const grades = [10, 9, 8, 7, 6];
 document.getElementById("rates").innerHTML = `<thead><tr><th>Mark</th>${grades.map(g => `<th>${g}</th>`).join("")}<th>5 or lower</th></tr></thead><tbody>` +
-  Object.entries(data.rates).map(([k, r]) => `<tr><td>${data.kinds[k]}${k === "K" ? " (K)" : ""}</td>${grades.map(g => `<td>${signed(r[g])}</td>`).join("")}<td>${signed(r.low)}</td></tr>`).join("") + `</tbody>`;
+  Object.values(data.kinds).map(k => `<tr><td>${k.name}${k.tag ? ` (${k.tag})` : ""}</td>${grades.map(g => `<td>${signed(k.rates[g])}</td>`).join("")}<td>${signed(k.rates.low)}</td></tr>`).join("") + `</tbody>`;
 
 drawFilter(); drawMonthly(); drawGrid();
 </script>

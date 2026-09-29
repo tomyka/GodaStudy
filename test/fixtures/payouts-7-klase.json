@@ -1,0 +1,42 @@
+[
+  {
+    "date": "2025-10-31",
+    "eur": 58,
+    "note": "from sheet"
+  },
+  {
+    "date": "2025-11-30",
+    "eur": 13,
+    "note": "from sheet"
+  },
+  {
+    "date": "2026-01-31",
+    "eur": 25,
+    "note": "from sheet"
+  },
+  {
+    "date": "2026-02-28",
+    "eur": 56,
+    "note": "from sheet"
+  },
+  {
+    "date": "2026-03-31",
+    "eur": 23,
+    "note": "from sheet"
+  },
+  {
+    "date": "2026-04-30",
+    "eur": 53,
+    "note": "from sheet"
+  },
+  {
+    "date": "2026-05-31",
+    "eur": 25,
+    "note": "from sheet"
+  },
+  {
+    "date": "2026-06-30",
+    "eur": 26,
+    "note": "from sheet"
+  }
+]

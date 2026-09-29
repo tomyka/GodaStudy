@@ -2,14 +2,13 @@
 // Prints only the distinct subjects, assessment types and values of the last few weeks, no names or ids.
 // Usage: pwsh scripts/tamo-probe.ps1   (or set TAMO_USERNAME/TAMO_PASSWORD and run node directly)
 import { readFile } from "node:fs/promises";
-import { fetchDiary, fetchRole, login } from "../src/tamo.mjs";
+import { tamoDiary } from "../src/tamo.mjs";
 
 const config = JSON.parse(await readFile(new URL("../config.json", import.meta.url), "utf8"));
-const token = await login(process.env.TAMO_USERNAME, process.env.TAMO_PASSWORD);
-const role = await fetchRole(token, config.tamo.role);
 const to = new Date();
 const from = new Date(to.getTime() - 28 * 864e5);
-const items = await fetchDiary(token, role, from.toLocaleDateString("sv-SE"), to.toLocaleDateString("sv-SE"));
+const diary = tamoDiary(process.env.TAMO_USERNAME, process.env.TAMO_PASSWORD, config.tamo.role);
+const items = await diary.read(from.toLocaleDateString("sv-SE"), to.toLocaleDateString("sv-SE"));
 
 const count = (key) => Object.entries(Object.groupBy(items, key)).map(([k, v]) => `${k} x${v.length}`);
 console.log(`${items.length} diary items in the last 4 weeks`);

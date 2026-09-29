@@ -22,6 +22,9 @@ jobs:
         with:
           node-version: 24
       - run: npm test
+      # Rebuild data.json from the stored marks and payouts, so a payment recorded with the form
+      # (or a fix made to payouts.json on GitHub) shows up without a run on the owner's PC.
+      - run: npm run rebuild
       - uses: actions/upload-pages-artifact@v4
         with:
           path: site
