@@ -16,8 +16,9 @@ const config = await readJson("config.json");
 let marks = await readJson("site/marks.json");
 const payouts = await readJson("site/payouts.json");
 const today = new Date().toLocaleDateString("sv-SE"); // YYYY-MM-DD, local time
+const offline = process.argv.includes("--offline");
 
-if (!process.argv.includes("--offline")) {
+if (!offline) {
   const diary = tamoDiary(process.env.TAMO_USERNAME, process.env.TAMO_PASSWORD, config.tamo.role);
   const refreshed = await refreshMarks({ stored: marks, tamo: config.tamo, today, diary, acceptFewer: process.argv.includes("--accept-fewer-marks") });
   refreshed.log.forEach((line) => console.log(line));
@@ -25,6 +26,8 @@ if (!process.argv.includes("--offline")) {
   await writeJson("site/marks.json", marks);
 }
 
-const report = buildReport(config, marks, payouts, today);
+// "Last updated" is the last refresh from TAMO, so an offline rebuild (as in CI) keeps the previous date.
+const previous = await readJson("site/data.json").catch(() => null);
+const report = buildReport(config, marks, payouts, offline ? previous?.updatedAt ?? today : today);
 await writeJson("site/data.json", report);
 console.log(`Marks to ${report.months.at(-1)?.month ?? "none"}, earned €${report.earned}, paid €${report.paid}, balance €${report.balance}`);

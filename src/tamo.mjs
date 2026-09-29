@@ -127,7 +127,7 @@ export function tamoDiary(username, password, roleMatch) {
   let session;
   return {
     async read(from, to) {
-      if (!username || !password) throw new Error("Set TAMO_USERNAME and TAMO_PASSWORD, or pass --offline");
+      if (!username || !password) throw new Error("No TAMO username or password given (TAMO_USERNAME, TAMO_PASSWORD)");
       session ??= login(username, password).then(async (token) => ({ token, role: await fetchRole(token, roleMatch) }));
       const { token, role } = await session;
       return fetchDiary(token, role, from, to);

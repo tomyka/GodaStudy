@@ -25,6 +25,12 @@ test("a payment counts in the school month its date falls in", () => {
   assert.deepEqual(timeline.map((t) => [t.earnedTotal, t.paidTotal, t.balance]), [[10, 5, 5], [30, 20, 10], [60, 20, 40]]);
 });
 
+test("payments edited out of date order are still counted in date order", () => {
+  const { timeline, payments } = moneyView(["2026-09", "2026-10"], [30, 30], [{ date: "2026-10-05", eur: 20 }, { date: "2026-09-10", eur: 10 }]);
+  assert.deepEqual(payments.map((p) => [p.date, p.paidTotal, p.balanceAfter]), [["2026-09-10", 10, 20], ["2026-10-05", 30, 30]]);
+  assert.deepEqual(timeline.map((t) => t.paidTotal), [10, 30]);
+});
+
 test("payments without any marks yet still count", () => {
   const { timeline, payments, balance } = moneyView([], [], [{ date: "2026-09-10", eur: 20 }]);
   assert.deepEqual(timeline, []);

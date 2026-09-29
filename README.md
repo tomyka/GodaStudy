@@ -45,7 +45,7 @@ Values that are not a mark from 1 to 10 are skipped: attendance ("n"), pass/fail
 
 ## First-time setup
 
-1. Save the TAMO parent login. It is stored encrypted with Windows DPAPI in `%APPDATA%\GodaStudy\tamo-login.xml`, where only your Windows user on this PC can read it. It is never put in the repo.
+1. Save the TAMO parent login. Run this in a normal PowerShell window, not with `!` in Claude Code, because it has to prompt for the username and password. It is stored encrypted with Windows DPAPI in `%APPDATA%\GodaStudy\tamo-login.xml`, where only your Windows user on this PC can read it. It is never put in the repo.
 
    ```powershell
    pwsh scripts/save-tamo-login.ps1
@@ -110,6 +110,7 @@ To add a new school year, add an entry to `years` in `config.json`, then run `np
 
 - `src/calendar.mjs`: school months and years.
 - `src/rewards.mjs`: mark kinds and rates, and euros per subject and month.
+- `src/payouts.mjs`: checks and adds a payment recorded with the form.
 - `src/report.mjs`: the money view (earned, paid, balance) and everything `data.json` holds.
 - `src/refresh.mjs`: one monthly refresh, including its window and the replace-and-keep rules. It reads from a diary source.
 - `src/tamo.mjs`: the TAMO protocol and `tamoDiary`, the real diary source. Tests use a fake one.

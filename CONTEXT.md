@@ -8,6 +8,8 @@
 
 **Payment**: money handed over, with its date. It counts in the school month its date falls in (a summer payment counts in June).
 
+**Payout**: the file and form name for a payment (`payouts.json`, "Record payout"); the same thing.
+
 **Balance**: everything earned by the end of a month minus everything paid by then; the sheet's "Likutis". Below zero means paid ahead.
 
 **School year**: September to June; July and August have no marks. Labelled in `config.json` `years` (`src/calendar.mjs`).

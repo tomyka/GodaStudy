@@ -133,7 +133,7 @@ a { color: inherit; }
     <div class="card-head">
       <div>
         <h2>Subjects</h2>
-        <p>Euros per subject and month. Hover a cell for the marks behind it; "K" marks a test.</p>
+        <p>Euros per subject and month. Hover a cell for the marks behind it.</p>
       </div>
       <div class="legend"><span><i class="sw-box" style="background:color-mix(in oklab, var(--pos) 70%, var(--surface))"></i>Earned</span><span><i class="sw-box" style="background:var(--zero)"></i>€0</span><span><i class="sw-box" style="background:color-mix(in oklab, var(--neg) 70%, var(--surface))"></i>Lost</span></div>
     </div>
@@ -198,13 +198,15 @@ try {
   throw err;
 }
 
-const T = data.months; // one entry per school month: month, year, earned, earnedTotal, paidTotal, balance
-const MONTHS = T.map(t => t.month);
+const ROWS = data.months; // one per school month: month, year, earned, earnedTotal, paidTotal, balance
+const MONTHS = ROWS.map(r => r.month);
+// Months before the first configured school year have no year name.
+const yearName = y => y || "Earlier";
 const last = MONTHS.length - 1;
 const PAID = data.payments.filter(p => p.month !== null);
 const markText = m => data.kinds[m.kind].tag + m.mark;
 // Whether the k-th of the month indexes idx begins a new school year.
-const startsYear = (idx, k) => k > 0 && T[idx[k]].year !== T[idx[k - 1]].year;
+const startsYear = (idx, k) => k > 0 && ROWS[idx[k]].year !== ROWS[idx[k - 1]].year;
 // The subjects that had marks in month i, best first.
 const subjectsIn = i => data.subjects.map(s => ({ name: s.name, ...s.months[i] })).filter(s => s.marks.length).sort((a, b) => b.earned - a.earned);
 
@@ -216,7 +218,7 @@ document.getElementById("footer").innerHTML = `Marks from the TAMO e-diary, refr
 const lastPaid = data.payments.at(-1);
 document.getElementById("money-tiles").innerHTML =
   `<div class="tile lead"><div class="k">${data.balance >= 0 ? "Owed now" : "Paid ahead"}</div><div class="v">${eur(Math.abs(data.balance))}</div><div class="d">earned minus paid</div></div>` +
-  `<div class="tile"><div class="k"><i class="sw-line" style="background:var(--pos)"></i>Total earned</div><div class="v">${eur(data.earned)}</div><div class="d">${MONTHS.length ? `${signed(T[last].earned)} in ${fmtM(MONTHS[last])}` : "no marks yet"}</div></div>` +
+  `<div class="tile"><div class="k"><i class="sw-line" style="background:var(--pos)"></i>Total earned</div><div class="v">${eur(data.earned)}</div><div class="d">${MONTHS.length ? `${signed(ROWS[last].earned)} in ${fmtM(MONTHS[last])}` : "no marks yet"}</div></div>` +
   `<div class="tile"><div class="k"><i class="sw-line" style="background:var(--ink)"></i>Total paid</div><div class="v">${eur(data.paid)}</div><div class="d">${lastPaid ? `last ${fmtD(lastPaid.date)}` : "no payments yet"}</div></div>`;
 
 // Tooltip
@@ -231,19 +233,19 @@ function showTip(e, html) {
 }
 const hideTip = () => tip.hidden = true;
 const row = (label, val) => `<div class="row"><span>${label}</span><span>${val}</span></div>`;
-const monthTip = i => `<div class="t">${fmtM(MONTHS[i])} · ${signed(T[i].earned)}</div>` +
+const monthTip = i => `<div class="t">${fmtM(MONTHS[i])} · ${signed(ROWS[i].earned)}</div>` +
   subjectsIn(i).map(s => row(esc(s.name), `${s.marks.map(markText).join(" ")} · ${signed(s.earned)}`)).join("");
 
 // Year filter: redraws the monthly chart and the subject grid for one school year, or all of them.
-const YEARS = [...new Set(T.map(t => t.year))];
+const YEARS = [...new Set(ROWS.map(r => r.year))];
 let year = YEARS.at(-1) ?? null;
 const filter = document.getElementById("filter");
 function drawFilter() {
-  const opts = [...YEARS.map(y => [y || "Earlier", y]), ["All years", null]];
+  const opts = [...YEARS.map(y => [yearName(y), y]), ["All years", null]];
   filter.innerHTML = `<span class="lab">School year</span>` + opts.map(([label, y], k) => `<button type="button" data-k="${k}" aria-pressed="${y === year}">${esc(label)}</button>`).join("");
   filter.querySelectorAll("button").forEach(b => b.onclick = () => { year = opts[+b.dataset.k][1]; drawFilter(); drawMonthly(); drawGrid(); });
 }
-const visible = () => T.map((t, i) => i).filter(i => year === null || T[i].year === year);
+const visible = () => ROWS.map((r, i) => i).filter(i => year === null || ROWS[i].year === year);
 
 // Month by month: one bar per school month, from a zero baseline; a gap separates school years.
 const W = 720;
@@ -257,7 +259,7 @@ function drawMonthly() {
   const slotW = (W - M.l - M.r) / (idx.length + breaks * .8);
   const xs = []; let pos = 0;
   idx.forEach((i, k) => { if (startsYear(idx, k)) pos += .8; xs.push(M.l + (pos + .5) * slotW); pos++; });
-  const vals = idx.map(i => T[i].earned);
+  const vals = idx.map(i => ROWS[i].earned);
   // Gridlines every €10, €20, €50... so there are about four of them whatever the amounts.
   const span = Math.max(20, ...vals) - Math.min(0, ...vals);
   const step = [10, 20, 50, 100, 200, 500, 1000].find(s => span / s <= 5) ?? 1000;
@@ -281,7 +283,7 @@ function drawMonthly() {
     }
     const t = el("text", { x, y: H - 18, "text-anchor": "middle" }, svg); t.textContent = fmtMs(MONTHS[i]);
     if (!k || startsYear(idx, k)) {
-      const yl = el("text", { x: x - bw / 2, y: H - 3, "text-anchor": "start" }, svg); yl.textContent = T[i].year;
+      const yl = el("text", { x: x - bw / 2, y: H - 3, "text-anchor": "start" }, svg); yl.textContent = yearName(ROWS[i].year);
     }
     const hit = el("rect", { x: x - slotW / 2, y: 0, width: slotW, height: H - M.b, fill: "transparent" }, svg);
     hit.addEventListener("pointermove", e => showTip(e, monthTip(i)));
@@ -296,31 +298,31 @@ function drawMonthly() {
   if (!MONTHS.length) { box.innerHTML = `<p class="empty">No marks yet.</p>`; return; }
   const H = 240, M = { l: 52, r: 8, t: 10, b: 22 };
   const x = i => M.l + (last ? i / last : .5) * (W - M.l - M.r);
-  const max = Math.max(100, Math.ceil(Math.max(...T.map(t => t.earnedTotal), data.paid) / 100) * 100);
-  const min = Math.min(0, Math.floor(Math.min(...T.map(t => t.earnedTotal)) / 100) * 100);
+  const max = Math.max(100, Math.ceil(Math.max(...ROWS.map(r => r.earnedTotal), data.paid) / 100) * 100);
+  const min = Math.min(0, Math.floor(Math.min(...ROWS.map(r => r.earnedTotal)) / 100) * 100);
   const y = v => M.t + (max - v) / (max - min) * (H - M.t - M.b);
   const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Running totals of euros earned and paid" });
   for (let v = min; v <= max; v += (max - min) / 4) {
     el("line", { x1: M.l, x2: W - M.r, y1: y(v), y2: y(v), stroke: v ? "var(--grid)" : "var(--line)" }, svg);
     const t = el("text", { x: M.l - 8, y: y(v) + 4, "text-anchor": "end" }, svg); t.textContent = eur(v);
   }
-  const all = T.map((t, i) => i);
-  all.forEach(i => { if (!i || startsYear(all, i)) { const t = el("text", { x: x(i), y: H - 6, "text-anchor": !i ? "start" : i === last ? "end" : "middle" }, svg); t.textContent = T[i].year; } });
+  const all = ROWS.map((r, i) => i);
+  all.forEach(i => { if (!i || startsYear(all, i)) { const t = el("text", { x: x(i), y: H - 6, "text-anchor": !i ? "start" : i === last ? "end" : "middle" }, svg); t.textContent = yearName(ROWS[i].year); } });
   // Earned is counted at each month's end: the point for month i is the total after it.
-  el("path", { d: `M${x(0)},${y(0)}` + T.map((t, i) => `L${x(i)},${y(t.earnedTotal)}`).join(""), fill: "none", stroke: "var(--pos)", "stroke-width": 2, "stroke-linejoin": "round" }, svg);
+  el("path", { d: `M${x(0)},${y(0)}` + ROWS.map((r, i) => `L${x(i)},${y(r.earnedTotal)}`).join(""), fill: "none", stroke: "var(--pos)", "stroke-width": 2, "stroke-linejoin": "round" }, svg);
   // Month i's point is its end, so a payment on day d of month i sits about d/30 of the way there from month i-1.
   const xDate = p => x(Math.max(0, p.month - 1 + (p.date.slice(0, 7) === MONTHS[p.month] ? Math.min(1, +p.date.slice(8) / 30) : 1)));
   let paid = `M${x(0)},${y(0)}`;
   PAID.forEach(p => { paid += `H${xDate(p)}V${y(p.paidTotal)}`; });
   el("path", { d: paid + `H${x(last)}`, fill: "none", stroke: "var(--ink)", "stroke-width": 2, "stroke-linejoin": "round" }, svg);
-  el("circle", { cx: x(last), cy: y(T[last].earnedTotal), r: 4.5, fill: "var(--pos)", stroke: "var(--surface)", "stroke-width": 2 }, svg);
+  el("circle", { cx: x(last), cy: y(ROWS[last].earnedTotal), r: 4.5, fill: "var(--pos)", stroke: "var(--surface)", "stroke-width": 2 }, svg);
   const cross = el("line", { y1: M.t, y2: H - M.b, stroke: "var(--ink-3)", "stroke-width": 1, visibility: "hidden" }, svg);
   const hit = el("rect", { x: M.l, y: 0, width: W - M.l - M.r, height: H, fill: "transparent" }, svg);
   hit.addEventListener("pointermove", e => {
     const b = svg.getBoundingClientRect(), px = (e.clientX - b.left) / b.width * W;
     const i = Math.max(0, Math.min(last, Math.round((px - M.l) / (W - M.l - M.r) * last)));
     cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
-    showTip(e, `<div class="t">End of ${fmtM(MONTHS[i])}</div>` + row("This month", signed(T[i].earned)) + row("Earned", eur(T[i].earnedTotal)) + row("Paid", eur(T[i].paidTotal)) + row("Balance", eur(T[i].balance)));
+    showTip(e, `<div class="t">End of ${fmtM(MONTHS[i])}</div>` + row("This month", signed(ROWS[i].earned)) + row("Earned", eur(ROWS[i].earnedTotal)) + row("Paid", eur(ROWS[i].paidTotal)) + row("Balance", eur(ROWS[i].balance)));
   });
   hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
   box.appendChild(svg);
@@ -342,7 +344,7 @@ function drawGrid() {
         ? `<td class="c${yr(k)}" data-s="${data.subjects.indexOf(s)}" data-i="${i}" style="background:${shade(c.earned, max)}">${signed(c.earned)}</td>`
         : `<td class="c none${yr(k)}">·</td>`;
     }).join("")}<td class="tot">${signed(sum(s))}</td></tr>`).join("") +
-    `<tr class="sum"><td>All subjects</td>${idx.map((i, k) => `<td class="${yr(k)}">${signed(T[i].earned)}</td>`).join("")}<td class="tot">${signed(idx.reduce((t, i) => t + T[i].earned, 0))}</td></tr></tbody>`;
+    `<tr class="sum"><td>All subjects</td>${idx.map((i, k) => `<td class="${yr(k)}">${signed(ROWS[i].earned)}</td>`).join("")}<td class="tot">${signed(idx.reduce((t, i) => t + ROWS[i].earned, 0))}</td></tr></tbody>`;
   grid.querySelectorAll("td[data-s]").forEach(td => {
     const s = data.subjects[+td.dataset.s], c = s.months[+td.dataset.i];
     td.addEventListener("pointermove", e => showTip(e, `<div class="t">${esc(s.name)} · ${fmtM(c.month)}</div>` +

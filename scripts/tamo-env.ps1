@@ -2,5 +2,6 @@
 $loginFile = "$env:APPDATA\GodaStudy\tamo-login.xml"
 if (-not (Test-Path $loginFile)) { throw "No saved TAMO login. Run: pwsh scripts/save-tamo-login.ps1" }
 $login = Import-Clixml $loginFile
+if (-not $login.UserName) { throw "The saved TAMO login is empty. Run pwsh scripts/save-tamo-login.ps1 again in a normal PowerShell window." }
 $env:TAMO_USERNAME = $login.UserName
 $env:TAMO_PASSWORD = $login.GetNetworkCredential().Password
