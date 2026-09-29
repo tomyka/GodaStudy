@@ -32,10 +32,11 @@ From the 8th grade on, marks are fetched from TAMO. There is no official TAMO AP
 - **What it sends.** Only read requests, about one per school week, once a month.
 - **Class data.** Only this child's own marks are available: no class averages and no classmates' marks.
 
-Each run fetches the whole current school year (from 1 September) and replaces that year's stored marks, so marks a teacher corrects later are picked up too. A run that returns fewer marks than already stored is refused, so a TAMO glitch cannot wipe marks. After a deliberate correction that removes marks, run `node scripts/update.mjs --accept-fewer-marks` once.
+Each run fetches the current school year up to the end of last month, and replaces that year's stored marks. So marks a teacher corrects later are picked up too, and a month appears once it is over. A run in July or August re-reads the year that just ended. A run that returns fewer marks than already stored is refused, so a TAMO glitch cannot wipe marks. After a deliberate correction that removes marks, run `node scripts/update.mjs --accept-fewer-marks` once.
 
 `config.json` controls how TAMO data is read:
 
+- `tamo.from` is the first day TAMO is the source, `2026-09-01`. Marks before it come only from the sheet and are never replaced.
 - `tamo.role` picks Goda among the children on the parent account, by matching part of the role's name.
 - `tamo.testTypes` lists fragments of TAMO's assessment type that mean a test. The default is `kontrolin`.
 - `tamo.subjects` shortens TAMO's subject names to the ones the sheet used, for example "Lietuvių kalba ir literatūra" becomes "Lietuvių k.".
@@ -60,7 +61,7 @@ Values that are not a mark from 1 to 10 are skipped: attendance ("n"), pass/fail
    - Tests must show an assessment type that contains `kontrolin`. If they use other wording, put it in `tamo.testTypes`.
    - Subject names should match the 7th-grade ones. If a name differs, add an entry to `tamo.subjects`.
 
-3. Run the job once: `pwsh scripts/monthly.ps1`.
+3. The first real fetch is on 1 October 2026, for September. A run before then only reports that there is nothing to fetch yet.
 
 ## How it runs
 

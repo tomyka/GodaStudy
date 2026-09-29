@@ -129,3 +129,13 @@ export function previousMonthEnd(today) {
   day.setUTCDate(0);
   return day.toISOString().slice(0, 10);
 }
+
+// The dates a run on `today` fetches: the school year up to the end of last month (a July or
+// August run re-reads the year just ended), but never before `tamoFrom`, the day TAMO took over
+// from the imported sheet. Null when there is nothing to fetch yet.
+export function fetchWindow(today, tamoFrom) {
+  const to = previousMonthEnd(today);
+  const yearStart = schoolYearStart(to);
+  const from = yearStart > tamoFrom ? yearStart : tamoFrom;
+  return from <= to ? { from, to } : null;
+}

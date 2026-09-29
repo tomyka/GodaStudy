@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { previousMonthEnd, schoolYearStart, selectRole, toMarks, weeks } from "../src/tamo.mjs";
+import { fetchWindow, previousMonthEnd, schoolYearStart, selectRole, toMarks, weeks } from "../src/tamo.mjs";
 
 const options = { testTypes: ["kontrolin"], subjects: { "Lietuvių kalba": "Lietuvių k." } };
 
@@ -52,6 +52,15 @@ test("the fetch stops at the end of the previous month", () => {
   assert.equal(previousMonthEnd("2027-01-01"), "2026-12-31");
   // A 1 September run re-reads the year just ended, not the empty new one.
   assert.equal(schoolYearStart(previousMonthEnd("2027-09-01")), "2026-09-01");
+});
+
+test("the fetch window never reaches back into the imported sheet", () => {
+  const tamoFrom = "2026-09-01";
+  assert.equal(fetchWindow("2026-09-29", tamoFrom), null); // September 2026 is not over yet
+  assert.deepEqual(fetchWindow("2026-10-01", tamoFrom), { from: "2026-09-01", to: "2026-09-30" });
+  assert.deepEqual(fetchWindow("2027-07-01", tamoFrom), { from: "2026-09-01", to: "2027-06-30" });
+  assert.deepEqual(fetchWindow("2027-09-01", tamoFrom), { from: "2026-09-01", to: "2027-08-31" });
+  assert.deepEqual(fetchWindow("2027-11-02", tamoFrom), { from: "2027-09-01", to: "2027-10-31" });
 });
 
 test("a role is picked by name, or is the only one", () => {
