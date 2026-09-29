@@ -26,6 +26,13 @@ test("the fetch window never reaches back into the imported sheet", () => {
   assert.deepEqual(fetchWindow("2027-11-02", tamo.from), { from: "2027-09-01", to: "2027-10-31" });
 });
 
+test("a one-off run can take the current month so far", async () => {
+  assert.deepEqual(fetchWindow("2026-09-29", tamo.from, { throughToday: true }), { from: "2026-09-01", to: "2026-09-29" });
+  const diary = fakeDiary([item("2026-09-14", "10")]);
+  const { marks } = await refreshMarks({ stored: sheet, tamo, today: "2026-09-29", diary, throughToday: true });
+  assert.deepEqual(marks.map((m) => m.month), ["2026-06", "2026-09"]);
+});
+
 test("before the first month is over nothing is read", async () => {
   const diary = fakeDiary([item("2026-09-14", "10")]);
   const { marks, log } = await refreshMarks({ stored: sheet, tamo, today: "2026-09-29", diary });

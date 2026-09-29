@@ -1,6 +1,8 @@
 # Monthly job, run by Windows Task Scheduler on the 1st (see README).
 # The TAMO login lives only on this PC, so the fetch runs here; the push then triggers
 # the GitHub workflow that tests and republishes the page.
+# -ThroughToday: a one-off run that also shows the current month so far.
+param([switch]$ThroughToday)
 $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path $PSScriptRoot -Parent)
 Start-Transcript -Path "$PSScriptRoot\monthly.log" -Append | Out-Null
@@ -8,7 +10,7 @@ try {
   . "$PSScriptRoot\tamo-env.ps1"
   git pull --ff-only
   if ($LASTEXITCODE) { throw "git pull failed" }
-  node scripts/update.mjs
+  if ($ThroughToday) { node scripts/update.mjs --through-today } else { node scripts/update.mjs }
   if ($LASTEXITCODE) { throw "update failed" }
   git add site/marks.json site/data.json
   git diff --cached --quiet

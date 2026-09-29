@@ -76,7 +76,7 @@ Only "Kontrolinis darbas" counts as a test; "Testas", "Savarankiškas darbas" an
    - writes a log to `scripts/monthly.log`.
 3. The push triggers `.github/workflows/update.yml`, which runs the tests, rebuilds `site/data.json` from the stored marks and payments, and publishes `site/` to GitHub Pages.
 
-To refresh now, run `pwsh scripts/monthly.ps1` or `Start-ScheduledTask "GodaStudy monthly TAMO update"`.
+To refresh now, run `pwsh scripts/monthly.ps1` or `Start-ScheduledTask "GodaStudy monthly TAMO update"`. Both fetch only months that are over. To also show the current month so far, run `pwsh scripts/monthly.ps1 -ThroughToday`. The next monthly run replaces that partial month with the whole month.
 
 To set up the task on another PC:
 

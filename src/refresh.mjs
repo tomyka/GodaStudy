@@ -4,9 +4,10 @@ import { toMarks } from "./tamo.mjs";
 
 // The dates a run on `today` fetches: the school year up to the end of last month (a July or
 // August run re-reads the year just ended), but never before `tamoFrom`, the day TAMO took over
-// from the imported sheet. Null when there is nothing to fetch yet.
-export function fetchWindow(today, tamoFrom) {
-  const to = previousMonthEnd(today);
+// from the imported sheet. Null when there is nothing to fetch yet. throughToday, for a one-off run,
+// also takes the current month so far; the next monthly run replaces it with the whole month.
+export function fetchWindow(today, tamoFrom, { throughToday = false } = {}) {
+  const to = throughToday ? today : previousMonthEnd(today);
   const yearStart = schoolYearStart(to);
   const from = yearStart > tamoFrom ? yearStart : tamoFrom;
   return from <= to ? { from, to } : null;
@@ -17,8 +18,8 @@ export function fetchWindow(today, tamoFrom) {
 // Marks before the window, including the imported sheet, are kept. A read with fewer marks than
 // already stored for the window is refused unless acceptFewer: a TAMO glitch or a changed format
 // would otherwise wipe marks. Returns the new marks and the lines to log.
-export async function refreshMarks({ stored, tamo, today, diary, acceptFewer = false }) {
-  const window = fetchWindow(today, tamo.from);
+export async function refreshMarks({ stored, tamo, today, diary, acceptFewer = false, throughToday = false }) {
+  const window = fetchWindow(today, tamo.from, { throughToday });
   if (!window) return { marks: stored, log: [`Nothing to fetch from TAMO yet: marks count from ${tamo.from} and a month is fetched once it is over`] };
   const { from, to } = window;
   const { marks: fetched, skipped } = toMarks(await diary.read(from, to), tamo);
