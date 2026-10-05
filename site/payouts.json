@@ -38,5 +38,10 @@
     "date": "2026-06-30",
     "eur": 26,
     "note": "from sheet"
+  },
+  {
+    "date": "2026-10-05",
+    "eur": 33,
+    "note": "for September"
   }
 ]

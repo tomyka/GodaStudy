@@ -115,8 +115,8 @@
       "month": "2026-09",
       "earned": 33,
       "earnedTotal": 312,
-      "paidTotal": 279,
-      "balance": 33,
+      "paidTotal": 312,
+      "balance": 0,
       "year": "8th grade"
     }
   ],
@@ -1585,9 +1585,17 @@
       "month": 9,
       "paidTotal": 279,
       "balanceAfter": 0
+    },
+    {
+      "date": "2026-10-05",
+      "eur": 33,
+      "note": "for September",
+      "month": 10,
+      "paidTotal": 312,
+      "balanceAfter": 0
     }
   ],
   "earned": 312,
-  "paid": 279,
-  "balance": 33
+  "paid": 312,
+  "balance": 0
 }
