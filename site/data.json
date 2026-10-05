@@ -3,7 +3,7 @@
     "name": "Goda"
   },
   "repo": "tomyka/GodaStudy",
-  "updatedAt": "2026-09-29",
+  "updatedAt": "2026-10-05",
   "kinds": {
     "A": {
       "name": "Mark",
@@ -113,10 +113,10 @@
     },
     {
       "month": "2026-09",
-      "earned": 28,
-      "earnedTotal": 307,
+      "earned": 33,
+      "earnedTotal": 312,
       "paidTotal": 279,
-      "balance": 28,
+      "balance": 33,
       "year": "8th grade"
     }
   ],
@@ -669,12 +669,19 @@
         },
         {
           "month": "2026-09",
-          "marks": [],
-          "earned": 0,
-          "total": -39
+          "marks": [
+            {
+              "date": "2026-09-23",
+              "mark": 10,
+              "kind": "A",
+              "eur": 5
+            }
+          ],
+          "earned": 5,
+          "total": -34
         }
       ],
-      "total": -39
+      "total": -34
     },
     {
       "name": "Geografija",
@@ -1580,7 +1587,7 @@
       "balanceAfter": 0
     }
   ],
-  "earned": 307,
+  "earned": 312,
   "paid": 279,
-  "balance": 28
+  "balance": 33
 }
