@@ -78,10 +78,10 @@ Only "Kontrolinis darbas" counts as a test; "Testas", "Savarankiškas darbas" an
 
 To refresh now, run `pwsh scripts/monthly.ps1` or `Start-ScheduledTask "GodaStudy monthly TAMO update"`. Both fetch only months that are over. To also show the current month so far, run `pwsh scripts/monthly.ps1 -ThroughToday`. The next monthly run replaces that partial month with the whole month.
 
-To set up the task on another PC:
+To set up the task on another PC, use the full path to `pwsh.exe`. Task Scheduler does not search PATH, and a plain `pwsh` fails with result 0x80070002 (file not found). With PowerShell from the Microsoft Store, the `WindowsApps\pwsh.exe` launcher below keeps working across PowerShell updates:
 
 ```powershell
-schtasks /Create /TN "GodaStudy monthly TAMO update" /SC MONTHLY /D 1 /ST 09:00 /TR "pwsh -NoProfile -ExecutionPolicy Bypass -File D:\Projects\GodaStudy\scripts\monthly.ps1"
+schtasks /Create /TN "GodaStudy monthly TAMO update" /SC MONTHLY /D 1 /ST 09:00 /TR "$env:LOCALAPPDATA\Microsoft\WindowsApps\pwsh.exe -NoProfile -ExecutionPolicy Bypass -File D:\Projects\GodaStudy\scripts\monthly.ps1"
 Set-ScheduledTask -TaskName "GodaStudy monthly TAMO update" -Settings (New-ScheduledTaskSettingsSet -StartWhenAvailable -RunOnlyIfNetworkAvailable -AllowStartIfOnBatteries)
 ```
 
